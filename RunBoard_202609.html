@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>橙选集配重庆经营看板 2026-09</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-text-size-adjust:100%}
+body{font-family:"Microsoft YaHei","PingFang SC",-apple-system,"Helvetica Neue",sans-serif;
+background:#EEF2F7;color:#1F2937;padding:10px}
+.wrap{max-width:1280px;margin:0 auto}
+.hdr{margin-bottom:10px}
+.brand{font-size:19px;font-weight:800;color:#1F4E79;letter-spacing:.3px}
+.sub{font-size:11.5px;color:#8A94A6;margin-top:3px}
+.tabs{display:flex;gap:8px;margin-bottom:10px}
+.tab{flex:1;text-align:center;padding:9px 0;border-radius:9px;background:#fff;color:#6B7280;
+font-size:14px;font-weight:700;cursor:pointer;border:1px solid #E3E8EF}
+.tab.on{background:#1F4E79;color:#fff;border-color:#1F4E79}
+.panel{display:none}
+.panel.on{display:block}
+
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:10px}
+.card{background:#fff;border-radius:12px;padding:13px 13px 12px;box-shadow:0 1px 3px rgba(16,24,40,.07);
+border-left:4px solid #4472C4}
+.card.main{grid-column:span 2;border-left-color:#1F4E79;
+background:linear-gradient(120deg,#1F4E79,#2E75B6);color:#fff}
+.card.o{border-left-color:#E97132}
+.card .k{font-size:12.5px;color:#7A8699;font-weight:700;letter-spacing:.3px}
+.card.main .k{color:#D6E4F0}
+.card .v{font-size:29px;font-weight:800;color:#1F4E79;line-height:1.15;margin-top:5px;
+font-variant-numeric:tabular-nums}
+.card.main .v{font-size:40px;color:#fff}
+.card.o .v{color:#C55A11}
+.card .u{font-size:13px;font-weight:700;color:#A8B0BD;margin-left:3px}
+.card.main .u{color:#C9DCEC}
+.card .s{font-size:11px;color:#A0A8B5;margin-top:5px}
+.card.main .s{color:#BFD3E8}
+
+.box{background:#fff;border-radius:12px;padding:12px 13px;margin-bottom:10px;
+box-shadow:0 1px 3px rgba(16,24,40,.07)}
+.box h3{font-size:13.5px;color:#374151;margin-bottom:8px;font-weight:800;
+display:flex;justify-content:space-between;align-items:baseline}
+.box h3 em{font-style:normal;font-size:11px;color:#A0A8B5;font-weight:400}
+
+.sorts{display:flex;gap:6px;margin-bottom:9px;flex-wrap:wrap}
+.sort{padding:5px 11px;border-radius:20px;background:#fff;color:#7A8699;font-size:12px;
+font-weight:700;cursor:pointer;border:1px solid #E3E8EF}
+.sort.on{background:#C55A11;color:#fff;border-color:#C55A11}
+
+.whlist{display:grid;grid-template-columns:1fr;gap:9px}
+.whcard{background:#fff;border-radius:12px;padding:12px 13px;box-shadow:0 1px 3px rgba(16,24,40,.07);
+border-top:3px solid #E97132}
+.wh-top{display:flex;justify-content:space-between;align-items:baseline}
+.wh-name{font-size:15px;font-weight:800;color:#000}
+.wh-ton{font-size:21px;font-weight:800;color:#C55A11;font-variant-numeric:tabular-nums}
+.wh-ton em{font-style:normal;font-size:12px;color:#A0A8B5;margin-left:2px}
+.bar{height:7px;background:#F1F3F6;border-radius:4px;overflow:hidden;margin:8px 0 10px}
+.bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#E97132,#F6B26B)}
+.wh-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.wh-grid div{background:#FBF7F3;border-radius:8px;padding:7px 4px;text-align:center}
+.wh-grid b{display:block;font-size:15px;font-weight:800;color:#374151;font-variant-numeric:tabular-nums}
+.wh-grid span{display:block;font-size:10.5px;color:#9AA3B0;margin-top:2px}
+.sumrow{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:10px}
+.sumrow div{background:#fff;border-radius:12px;padding:11px;text-align:center;
+box-shadow:0 1px 3px rgba(16,24,40,.07);border-bottom:3px solid #1F4E79}
+.sumrow b{display:block;font-size:22px;font-weight:800;color:#1F4E79;font-variant-numeric:tabular-nums}
+.sumrow span{display:block;font-size:11px;color:#8A94A6;margin-top:2px}
+
+/* 城市仓详情（点卡片弹出） */
+.whcard{cursor:pointer;position:relative;padding-bottom:24px;transition:transform .12s}
+.whcard:active{transform:scale(.985)}
+.wh-more{position:absolute;right:13px;bottom:7px;font-size:11px;color:#C55A11;font-weight:700}
+.wh-more:after{content:" ›"}
+.wh-chip{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:99px;
+vertical-align:middle;margin-left:5px;line-height:1.4}
+.wh-chip.closed{background:#F1F3F4;color:#9AA0A6}
+.wh-closed{opacity:.55;background:#F7F8FA!important;border-color:#E4E7EC!important}
+.wh-closed .wh-ton{color:#9AA0A6}
+.wh-closed-note{font-size:11px;color:#9AA0A6;background:#F1F3F4;padding:5px 9px;border-radius:6px;
+margin-top:7px;line-height:1.45}
+.mask{position:fixed;inset:0;background:rgba(17,24,39,.45);z-index:50;display:none}
+.mask.on{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:51;background:#EEF2F7;
+border-radius:16px 16px 0 0;max-height:88vh;overflow-y:auto;padding:14px 12px 26px;
+transform:translateY(102%);transition:transform .26s ease;-webkit-overflow-scrolling:touch}
+.sheet.on{transform:translateY(0)}
+.sh-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:10px}
+.sh-t{font-size:17px;font-weight:800;color:#1F4E79;line-height:1.25}
+.sh-s{font-size:11px;color:#8A94A6;margin-top:3px}
+.sh-x{width:28px;height:28px;border-radius:50%;background:#fff;color:#7A8699;font-size:18px;
+display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid #E3E8EF;
+flex:none;line-height:1}
+.sh-kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px}
+.sh-kpi div{background:#fff;border-radius:10px;padding:9px 3px;text-align:center;
+box-shadow:0 1px 3px rgba(16,24,40,.07)}
+.sh-kpi b{display:block;font-size:15.5px;font-weight:800;color:#1F4E79;font-variant-numeric:tabular-nums}
+.sh-kpi span{display:block;font-size:10px;color:#9AA3B0;margin-top:2px}
+.newold{display:flex;height:26px;border-radius:8px;overflow:hidden;margin:2px 0 7px;
+font-size:11px;font-weight:700}
+.newold i{display:flex;align-items:center;justify-content:center;color:#fff;font-style:normal;
+transition:width .2s}
+.no-legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11px;color:#6B7280;line-height:1.7}
+.no-legend em{font-style:normal;display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px}
+.rank{list-style:none}
+.rank li{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #EDF0F4}
+.rank li:last-child{border-bottom:none}
+.rk{width:18px;height:18px;border-radius:5px;background:#F1F3F6;color:#8A94A6;font-size:10.5px;
+font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.rank li:nth-child(1) .rk{background:#E97132;color:#fff}
+.rank li:nth-child(2) .rk{background:#F0A868;color:#fff}
+.rank li:nth-child(3) .rk{background:#F7C797;color:#8A4B12}
+.rn{flex:1;font-size:12.5px;color:#374151;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rv{font-size:12.5px;font-weight:800;color:#C55A11;font-variant-numeric:tabular-nums;flex:none}
+.sh-empty{font-size:12px;color:#A0A8B5;padding:6px 0}
+
+/* 排序说明栏 */
+.sortbar{display:flex;align-items:center;gap:8px;margin:0 0 8px}
+.sortbar .lb{font-size:12px;font-weight:800;color:#6B7280;flex:none}
+.sortbar .hint{font-size:11px;color:#A0A8B5;flex:none}
+.sortbar .sorts{flex:1;margin-bottom:0;justify-content:flex-end}
+
+@media(min-width:700px){
+  .sheet{left:50%;right:auto;transform:translate(-50%,102%);width:660px;border-radius:16px 16px 0 0}
+  .sheet.on{transform:translate(-50%,0)}
+}
+  body{padding:16px}
+  .brand{font-size:22px}
+  .whlist{grid-template-columns:repeat(2,1fr)}
+}
+@media(min-width:1000px){
+  .cards{grid-template-columns:repeat(5,1fr)}
+  .card.main{grid-column:span 1}
+  .card.main .v{font-size:32px}
+  .whlist{grid-template-columns:repeat(3,1fr)}
+}
+</style></head><body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="brand">橙选集配重庆 · 2026年9月经营看板</div>
+    <div class="sub">数据截至 2026-09-01 供货日（已完成） · 抓取 2026-09-01 15:54</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" data-p="p1">总看板</div>
+    <div class="tab" data-p="p2">城市仓看板</div>
+  </div>
+
+  <div class="panel on" id="p1">
+    <div class="cards" id="cards"></div>
+    <div class="box">
+      <h3>按日吨位走势<em>单位：吨</em></h3>
+      <div id="chartTon"></div>
+    </div>
+    <div class="box">
+      <h3>按日新开客户<em>单位：户</em></h3>
+      <div id="chartNew"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="p2">
+    <div class="sumrow" id="sumRow"></div>
+    <div class="sortbar">
+      <span class="lb">排序</span>
+      <div class="sorts">
+        <span class="sort on" data-k="month_ton">按吨位</span>
+        <span class="sort" data-k="day_ton">按今日吨位</span>
+        <span class="sort" data-k="active">按月活</span>
+        <span class="sort" data-k="r3_rate">按复购率</span>
+        <span class="sort" data-k="per_order_ton">按客单吨位</span>
+      </div>
+    </div>
+    <div class="whlist" id="whList"></div>
+  </div>
+</div>
+
+<div class="mask" id="mask" onclick="closeDetail()"></div>
+<div class="sheet" id="sheet">
+  <div class="sh-hd">
+    <div><div class="sh-t" id="shT"></div><div class="sh-s" id="shS"></div></div>
+    <div class="sh-x" onclick="closeDetail()">×</div>
+  </div>
+  <div class="sh-kpi" id="shKpi"></div>
+  <div class="box">
+    <h3>近 1 个供货日吨位走势<em>单位：吨</em></h3>
+    <div id="shChart"></div>
+  </div>
+  <div class="box">
+    <h3>新老客户构成<em>按客户数占比</em></h3>
+    <div id="shNewOld"></div>
+  </div>
+  <div class="box">
+    <h3>TOP 客户<em>按吨位</em></h3>
+    <div id="shCust"></div>
+  </div>
+  <div class="box">
+    <h3>TOP 商品<em>按下单客户数</em></h3>
+    <div id="shItem"></div>
+  </div>
+  <div class="box">
+    <h3>TOP 品类<em>按吨位</em></h3>
+    <div id="shCat"></div>
+  </div>
+</div>
+<script>window.__DATA__ = {"total": {"ton": 65.51, "stat_day": "09-01", "stat_day_full": "2026-09-01", "last_day": "2026-09-01", "last_day_ton": 65.51, "new_cust": 60, "new_member": 51, "month_active": 390, "first_conv": 1.1764705882352942, "first_conv_strict": 0.29411764705882354, "new_and_reg": 15, "r3": {"base": 390, "repeat": 0, "rate": 0.0, "d1": 390, "d2": 0, "d3": 0}, "days": 1, "order_cnt": 486, "avg_day_ton": 65.51, "done_days": 1, "done_ton": 65.51, "recent3": ["09-01"], "plat_new_n": 60, "plat_new_ton": 7.44, "plat_old_n": 330, "plat_old_ton": 58.07, "wh_active_n": 22, "wh_closed_n": 0, "wh_total_n": 22, "active_month_active": 390, "active_order_cnt": 486, "active_ton": 65.51, "active_r3": {"base": 390, "repeat": 0, "rate": 0.0, "d1": 390, "d2": 0, "d3": 0}, "new_in_active": 60, "active_first_conv": 1.1764705882352942, "plat_top_cust": [{"name": "冉兴兰", "ton": 13.3}, {"name": "闫四", "ton": 1.34}, {"name": "惠优水果超市一校店", "ton": 1.25}, {"name": "杨超伟", "ton": 1.25}, {"name": "老板", "ton": 1.23}, {"name": "罗老板", "ton": 1.1}, {"name": "刘颖", "ton": 1.09}, {"name": "宏展超市", "ton": 1.07}, {"name": "城西二楼116刘群华", "ton": 0.93}, {"name": "小刘蔬菜", "ton": 0.64}], "plat_top_item": [{"name": "【品牌】云南一级洗小葱26斤泡沫箱", "cust": 62, "ton": 4.96}, {"name": "云南昭通一级油麦菜大件大颗油麦菜泡沫箱", "cust": 45, "ton": 3.46}, {"name": "云南一级香菜19斤泡沫箱", "cust": 45, "ton": 1.09}, {"name": "云南一级筐西红柿粉果带把毛重40-42斤", "cust": 37, "ton": 1.26}, {"name": "云南二级油麦菜净重32斤泡沫箱", "cust": 29, "ton": 0.9}, {"name": "云南一级基地直供生菜大件泡沫箱", "cust": 28, "ton": 1.16}, {"name": "老挝B级活动款香蕉二黄24斤/件4-5号色", "cust": 26, "ton": 1.41}, {"name": "云南一级大水白菜泡沫箱大件", "cust": 21, "ton": 0.65}, {"name": "陕西省一级陕西沙地3两至6两黄心大土豆袋3两至6两", "cust": 20, "ton": 0.7}, {"name": "兰州一级散花菜30斤/件泡沫箱", "cust": 20, "ton": 0.56}], "plat_top_cat": [{"name": "蔬菜", "ton": 58.15}, {"name": "国产水果", "ton": 6.03}, {"name": "酒水饮料", "ton": 0.46}, {"name": "米面油蛋", "ton": 0.44}, {"name": "进口精品水果", "ton": 0.33}, {"name": "调料干货", "ton": 0.06}, {"name": "果篮/包材", "ton": 0.04}]}, "wh": [{"wh": "南川仓", "day_ton": 13.303799999999999, "recent3_ton": 13.304, "status": "active", "month_ton": 13.303799999999999, "avg_ton": 13.303799999999999, "active": 1, "order_cnt": 7, "per_order_ton": 1.900542857142857, "per_cust_ton": 13.303799999999999, "r3_base": 1, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 13.304}], "new_n": 0, "new_ton": 0, "old_n": 1, "old_ton": 13.3, "top_cust": [{"name": "冉兴兰", "ton": 13.3}], "top_item": [{"name": "云南二级李二水洗葱细小葱泡沫箱", "cust": 1, "ton": 7.06}, {"name": "陕西省一级陕西黄心土豆6两起袋净重50斤", "cust": 1, "ton": 2.51}, {"name": "重庆二级蜜本老南瓜80斤/袋", "cust": 1, "ton": 1.2}, {"name": "广西二级密本南瓜老南瓜", "cust": 1, "ton": 0.72}, {"name": "老挝B级【能驰果品】二级香蕉二黄24斤4-5号色", "cust": 1, "ton": 0.56}], "top_cat": [{"name": "蔬菜", "ton": 12.39}, {"name": "国产水果", "ton": 0.91}]}}, {"wh": "巴中仓", "day_ton": 7.822, "recent3_ton": 7.822, "status": "active", "month_ton": 7.822, "avg_ton": 7.822, "active": 39, "order_cnt": 47, "per_order_ton": 0.16642553191489362, "per_cust_ton": 0.20056410256410256, "r3_base": 39, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 7.822}], "new_n": 0, "new_ton": 0, "old_n": 39, "old_ton": 7.82, "top_cust": [{"name": "城西二楼116刘群华", "ton": 0.93}, {"name": "庞清匀", "ton": 0.51}, {"name": "王焕明", "ton": 0.46}, {"name": "厨小满", "ton": 0.44}, {"name": "彭", "ton": 0.4}], "top_item": [{"name": "【品牌】云南一级洗小葱26斤泡沫箱", "cust": 12, "ton": 2.02}, {"name": "云南一级筐西红柿粉果带把毛重40-42斤", "cust": 9, "ton": 0.4}, {"name": "云南一级香菜19斤泡沫箱", "cust": 9, "ton": 0.3}, {"name": "云南二级李二水洗葱细小葱泡沫箱", "cust": 8, "ton": 0.53}, {"name": "山东二级蒜米（中号）40斤（5斤/包）袋", "cust": 7, "ton": 0.36}], "top_cat": [{"name": "蔬菜", "ton": 7.7}, {"name": "国产水果", "ton": 0.06}, {"name": "果篮/包材", "ton": 0.04}, {"name": "进口精品水果", "ton": 0.02}]}}, {"wh": "开州仓", "day_ton": 7.5013, "recent3_ton": 7.501, "status": "active", "month_ton": 7.5013, "avg_ton": 7.5013, "active": 36, "order_cnt": 52, "per_order_ton": 0.14425576923076922, "per_cust_ton": 0.20836944444444444, "r3_base": 36, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 7.501}], "new_n": 1, "new_ton": 0.39, "old_n": 35, "old_ton": 7.11, "top_cust": [{"name": "惠优水果超市一校店", "ton": 1.25}, {"name": "罗老板", "ton": 1.1}, {"name": "宏展超市", "ton": 1.07}, {"name": "小刘蔬菜", "ton": 0.64}, {"name": "乐尔乐生鲜超市", "ton": 0.48}], "top_item": [{"name": "云南一级筐西红柿粉果带把毛重40-42斤", "cust": 8, "ton": 0.36}, {"name": "云南一级基地直供生菜大件泡沫箱", "cust": 5, "ton": 0.32}, {"name": "云南一级香菜19斤泡沫箱", "cust": 5, "ton": 0.12}, {"name": "老挝B级活动款香蕉二黄24斤/件4-5号色", "cust": 4, "ton": 0.56}, {"name": "兰州一级散花菜30斤/件泡沫箱", "cust": 4, "ton": 0.14}], "top_cat": [{"name": "蔬菜", "ton": 5.1}, {"name": "国产水果", "ton": 2.16}, {"name": "进口精品水果", "ton": 0.2}, {"name": "调料干货", "ton": 0.05}]}}, {"wh": "彭水仓", "day_ton": 4.5632, "recent3_ton": 4.563, "status": "active", "month_ton": 4.5632, "avg_ton": 4.5632, "active": 22, "order_cnt": 30, "per_order_ton": 0.15210666666666667, "per_cust_ton": 0.20741818181818183, "r3_base": 22, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 4.563}], "new_n": 2, "new_ton": 1.54, "old_n": 20, "old_ton": 3.02, "top_cust": [{"name": "老板", "ton": 1.23}, {"name": "高可会", "ton": 0.38}, {"name": "老板", "ton": 0.34}, {"name": "老板", "ton": 0.34}, {"name": "刘老板", "ton": 0.31}], "top_item": [{"name": "【品牌】云南一级洗小葱26斤泡沫箱", "cust": 6, "ton": 0.3}, {"name": "云南二级李二水洗葱细小葱泡沫箱", "cust": 5, "ton": 0.18}, {"name": "云南一级香菜19斤泡沫箱", "cust": 4, "ton": 0.07}, {"name": "兰州一级散花菜30斤/件泡沫箱", "cust": 3, "ton": 0.14}, {"name": "陕西省一级中号胡萝卜20斤袋", "cust": 3, "ton": 0.12}], "top_cat": [{"name": "蔬菜", "ton": 4.34}, {"name": "国产水果", "ton": 0.21}, {"name": "进口精品水果", "ton": 0.02}]}}, {"wh": "渠县仓", "day_ton": 3.517, "recent3_ton": 3.517, "status": "active", "month_ton": 3.517, "avg_ton": 3.517, "active": 36, "order_cnt": 45, "per_order_ton": 0.07815555555555555, "per_cust_ton": 0.09769444444444444, "r3_base": 36, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 3.517}], "new_n": 15, "new_ton": 0.97, "old_n": 21, "old_ton": 2.55, "top_cust": [{"name": "李晓伟", "ton": 0.51}, {"name": "催哥，凌晨3点之前", "ton": 0.27}, {"name": "方姐（第五幼儿园对面）", "ton": 0.19}, {"name": "蒋姐", "ton": 0.16}, {"name": "赖姐", "ton": 0.16}], "top_item": [{"name": "【品牌】云南一级洗小葱26斤泡沫箱", "cust": 7, "ton": 0.24}, {"name": "陕西省一级陕西沙地3两至6两黄心大土豆袋3两至6两", "cust": 6, "ton": 0.15}, {"name": "云南一级筐西红柿粉果带把毛重40-42斤", "cust": 5, "ton": 0.13}, {"name": "云南昭通一级油麦菜大件大颗油麦菜泡沫箱", "cust": 4, "ton": 0.4}, {"name": "云南一级水洗白小葱26斤/件泡沫箱", "cust": 3, "ton": 0.11}], "top_cat": [{"name": "蔬菜", "ton": 3.35}, {"name": "国产水果", "ton": 0.17}]}}, {"wh": "达州仓", "day_ton": 2.8594, "recent3_ton": 2.859, "status": "active", "month_ton": 2.8594, "avg_ton": 2.8594, "active": 32, "order_cnt": 34, "per_order_ton": 0.0841, "per_cust_ton": 0.08935625, "r3_base": 32, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 2.859}], "new_n": 0, "new_ton": 0, "old_n": 32, "old_ton": 2.86, "top_cust": [{"name": "杨姐", "ton": 0.26}, {"name": "邵姐", "ton": 0.24}, {"name": "臻鲜坊", "ton": 0.2}, {"name": "张哥", "ton": 0.2}, {"name": "刘姐", "ton": 0.18}], "top_item": [{"name": "云南昭通一级油麦菜大件大颗油麦菜泡沫箱", "cust": 6, "ton": 0.43}, {"name": "云南一级香菜19斤泡沫箱", "cust": 6, "ton": 0.1}, {"name": "云南一级精品牛心白15斤袋装袋", "cust": 4, "ton": 0.07}, {"name": "云南二级筐西红柿红果4层毛重40-42", "cust": 3, "ton": 0.18}, {"name": "云南二级油麦菜净重32斤泡沫箱", "cust": 3, "ton": 0.1}], "top_cat": [{"name": "蔬菜", "ton": 2.64}, {"name": "国产水果", "ton": 0.2}, {"name": "进口精品水果", "ton": 0.02}]}}, {"wh": "万州仓", "day_ton": 2.6710000000000003, "recent3_ton": 2.671, "status": "active", "month_ton": 2.6710000000000003, "avg_ton": 2.6710000000000003, "active": 25, "order_cnt": 30, "per_order_ton": 0.08903333333333334, "per_cust_ton": 0.10684, "r3_base": 25, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 2.671}], "new_n": 1, "new_ton": 0.07, "old_n": 24, "old_ton": 2.6, "top_cust": [{"name": "徐老板", "ton": 0.37}, {"name": "王小琴", "ton": 0.17}, {"name": "骆明献", "ton": 0.17}, {"name": "张", "ton": 0.16}, {"name": "丁姐", "ton": 0.16}], "top_item": [{"name": "老挝B级活动款香蕉二黄24斤/件4-5号色", "cust": 6, "ton": 0.3}, {"name": "云南昭通一级油麦菜大件大颗油麦菜泡沫箱", "cust": 5, "ton": 0.23}, {"name": "四川宜宾二级大号脆藕净重30斤泡沫箱", "cust": 3, "ton": 0.13}, {"name": "云南一级基地直供生菜大件泡沫箱", "cust": 3, "ton": 0.12}, {"name": "品牌云南一级大水白菜泡沫箱47", "cust": 3, "ton": 0.07}], "top_cat": [{"name": "蔬菜", "ton": 2.06}, {"name": "国产水果", "ton": 0.58}, {"name": "进口精品水果", "ton": 0.03}]}}, {"wh": "广安仓", "day_ton": 2.5858, "recent3_ton": 2.586, "status": "active", "month_ton": 2.5858, "avg_ton": 2.5858, "active": 17, "order_cnt": 23, "per_order_ton": 0.11242608695652173, "per_cust_ton": 0.15210588235294117, "r3_base": 17, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 2.586}], "new_n": 2, "new_ton": 0.58, "old_n": 15, "old_ton": 2.0, "top_cust": [{"name": "刘建军", "ton": 0.44}, {"name": "黄银城", "ton": 0.3}, {"name": "赵老板", "ton": 0.28}, {"name": "易老板", "ton": 0.24}, {"name": "袁小利", "ton": 0.22}], "top_item": [{"name": "【品牌】云南一级洗小葱26斤泡沫箱", "cust": 9, "ton": 1.36}, {"name": "云南一级香菜19斤泡沫箱", "cust": 3, "ton": 0.05}, {"name": "陕西省一级陕西黄心土豆6两起袋净重50斤", "cust": 2, "ton": 0.08}, {"name": "云南昭通一级油麦菜大件大颗油麦菜泡沫箱", "cust": 2, "ton": 0.07}, {"name": "广西二级仔姜净重8斤泡沫箱", "cust": 2, "ton": 0.05}], "top_cat": [{"name": "蔬菜", "ton": 2.52}, {"name": "国产水果", "ton": 0.07}]}}, {"wh": "奉节仓", "day_ton": 2.525, "recent3_ton": 2.525, "status": "active", "month_ton": 2.525, "avg_ton": 2.525, "active": 20, "order_cnt": 24, "per_order_ton": 0.10520833333333333, "per_cust_ton": 0.12625, "r3_base": 20, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 2.525}], "new_n": 14, "new_ton": 1.87, "old_n": 6, "old_ton": 0.66, "top_cust": [{"name": "老板", "ton": 0.45}, {"name": "陈姐", "ton": 0.36}, {"name": "黄姐", "ton": 0.31}, {"name": "黄姐", "ton": 0.19}, {"name": "东江宾馆", "ton": 0.13}], "top_item": [{"name": "云南昭通一级油麦菜大件大颗油麦菜泡沫箱", "cust": 6, "ton": 0.53}, {"name": "广西二级仔姜特价白口仔姜净重8斤泡沫箱", "cust": 4, "ton": 0.04}, {"name": "云南昭通一级油麦菜净重50斤泡沫箱", "cust": 3, "ton": 0.43}, {"name": "云南二级油麦菜净重32斤泡沫箱", "cust": 3, "ton": 0.05}, {"name": "【农夫山泉】饮用纯净水12瓶*550ml", "cust": 2, "ton": 0.26}], "top_cat": [{"name": "蔬菜", "ton": 2.14}, {"name": "酒水饮料", "ton": 0.26}, {"name": "国产水果", "ton": 0.12}]}}, {"wh": "遂宁仓", "day_ton": 2.3968000000000003, "recent3_ton": 2.397, "status": "active", "month_ton": 2.3968000000000003, "avg_ton": 2.3968000000000003, "active": 17, "order_cnt": 22, "per_order_ton": 0.10894545454545455, "per_cust_ton": 0.14098823529411766, "r3_base": 17, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 2.397}], "new_n": 5, "new_ton": 0.16, "old_n": 12, "old_ton": 2.24, "top_cust": [{"name": "闫四", "ton": 1.34}, {"name": "夏老板", "ton": 0.24}, {"name": "老板", "ton": 0.11}, {"name": "王三哥", "ton": 0.09}, {"name": "老板", "ton": 0.08}], "top_item": [{"name": "云南二级油麦菜净重32斤泡沫箱", "cust": 3, "ton": 0.13}, {"name": "云南一级香菜19斤泡沫箱", "cust": 3, "ton": 0.08}, {"name": "云南昭通一级油麦菜大件大颗油麦菜泡沫箱", "cust": 2, "ton": 0.1}, {"name": "云南昭通一级油麦菜净重55斤泡沫箱", "cust": 2, "ton": 0.07}, {"name": "云南一级基地直供生菜大件泡沫箱", "cust": 2, "ton": 0.06}], "top_cat": [{"name": "蔬菜", "ton": 2.38}, {"name": "国产水果", "ton": 0.01}]}}, {"wh": "大足仓", "day_ton": 1.9942, "recent3_ton": 1.994, "status": "active", "month_ton": 1.9942, "avg_ton": 1.9942, "active": 8, "order_cnt": 11, "per_order_ton": 0.18129090909090909, "per_cust_ton": 0.249275, "r3_base": 8, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 1.994}], "new_n": 0, "new_ton": 0, "old_n": 8, "old_ton": 1.99, "top_cust": [{"name": "杨超伟", "ton": 1.25}, {"name": "周", "ton": 0.23}, {"name": "龙水蔬菜批发", "ton": 0.22}, {"name": "李老板", "ton": 0.11}, {"name": "杨长萍", "ton": 0.08}], "top_item": [{"name": "陕西三级新黄皮黄心土豆大袋6两起", "cust": 2, "ton": 0.25}, {"name": "云南昭通一级油麦菜净重55斤泡沫箱", "cust": 2, "ton": 0.24}, {"name": "【品牌】云南一级洗小葱26斤泡沫箱", "cust": 2, "ton": 0.04}, {"name": "云南一级红小米辣净重19斤/件泡沫箱", "cust": 2, "ton": 0.02}, {"name": "四川二级薄皮青椒25斤净重纸箱", "cust": 1, "ton": 0.14}], "top_cat": [{"name": "蔬菜", "ton": 1.93}, {"name": "国产水果", "ton": 0.06}]}}, {"wh": "合川仓", "day_ton": 1.827, "recent3_ton": 1.827, "status": "active", "month_ton": 1.827, "avg_ton": 1.827, "active": 20, "order_cnt": 27, "per_order_ton": 0.06766666666666667, "per_cust_ton": 0.09135, "r3_base": 20, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 1.827}], "new_n": 0, "new_ton": 0, "old_n": 20, "old_ton": 1.83, "top_cust": [{"name": "林老板", "ton": 0.36}, {"name": "杨", "ton": 0.19}, {"name": "邓英", "ton": 0.18}, {"name": "李", "ton": 0.13}, {"name": "陈老板", "ton": 0.12}], "top_item": [{"name": "陕西省一级陕西沙地3两至6两黄心大土豆袋3两至6两", "cust": 4, "ton": 0.15}, {"name": "陕西二级市场黄心土豆6两起袋净重50斤", "cust": 3, "ton": 0.13}, {"name": "云南二级筐西红柿红果4层毛重40-42", "cust": 3, "ton": 0.06}, {"name": "【品牌】云南一级洗小葱26斤泡沫箱", "cust": 3, "ton": 0.06}, {"name": "老挝B级活动款香蕉二黄24斤/件4-5号色", "cust": 3, "ton": 0.05}], "top_cat": [{"name": "蔬菜", "ton": 1.56}, {"name": "国产水果", "ton": 0.23}, {"name": "进口精品水果", "ton": 0.02}, {"name": "调料干货", "ton": 0.01}]}}, {"wh": "城口仓", "day_ton": 1.724, "recent3_ton": 1.724, "status": "active", "month_ton": 1.724, "avg_ton": 1.724, "active": 15, "order_cnt": 17, "per_order_ton": 0.10141176470588235, "per_cust_ton": 0.11493333333333333, "r3_base": 15, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 1.724}], "new_n": 0, "new_ton": 0, "old_n": 15, "old_ton": 1.72, "top_cust": [{"name": "甘老板娘", "ton": 0.44}, {"name": "城口海超蔬菜", "ton": 0.27}, {"name": "城口兴超蔬菜水果批发", "ton": 0.17}, {"name": "城口鑫洋生鲜超市", "ton": 0.12}, {"name": "曾姐", "ton": 0.11}], "top_item": [{"name": "四川宜宾二级大号脆藕净重30斤泡沫箱", "cust": 4, "ton": 0.07}, {"name": "云南一级红小米辣净重19斤/件泡沫箱", "cust": 3, "ton": 0.03}, {"name": "云南昭通一级油麦菜大件大颗油麦菜泡沫箱", "cust": 2, "ton": 0.07}, {"name": "云南一级筐西红柿粉果带把毛重40-42斤", "cust": 2, "ton": 0.04}, {"name": "银川一级活动款银川白玉山药白玉山药面山药20斤袋装袋", "cust": 2, "ton": 0.04}], "top_cat": [{"name": "蔬菜", "ton": 1.16}, {"name": "米面油蛋", "ton": 0.44}, {"name": "国产水果", "ton": 0.12}]}}, {"wh": "涪陵仓", "day_ton": 1.6095, "recent3_ton": 1.609, "status": "active", "month_ton": 1.6095, "avg_ton": 1.6095, "active": 18, "order_cnt": 20, "per_order_ton": 0.08047499999999999, "per_cust_ton": 0.08941666666666666, "r3_base": 18, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 1.609}], "new_n": 1, "new_ton": 0.09, "old_n": 17, "old_ton": 1.52, "top_cust": [{"name": "零小贤生鲜果蔬", "ton": 0.22}, {"name": "周老板", "ton": 0.22}, {"name": "新纪元陈兴琪", "ton": 0.16}, {"name": "老板", "ton": 0.14}, {"name": "瞿先生", "ton": 0.12}], "top_item": [{"name": "云南一级基地直供生菜大件泡沫箱", "cust": 2, "ton": 0.12}, {"name": "【品牌】云南一级洗小葱26斤泡沫箱", "cust": 2, "ton": 0.06}, {"name": "品牌云南一级竹筒白泡沫箱54", "cust": 2, "ton": 0.05}, {"name": "河南二级大蒜5.0-5.5大蒜20斤袋", "cust": 2, "ton": 0.03}, {"name": "四川B级【泓渝】嘉秀6号口口脆2号箱纸箱", "cust": 2, "ton": 0.02}], "top_cat": [{"name": "蔬菜", "ton": 1.24}, {"name": "国产水果", "ton": 0.37}]}}, {"wh": "黔江仓", "day_ton": 1.5033, "recent3_ton": 1.503, "status": "active", "month_ton": 1.5033, "avg_ton": 1.5033, "active": 19, "order_cnt": 23, "per_order_ton": 0.06536086956521739, "per_cust_ton": 0.07912105263157895, "r3_base": 19, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 1.503}], "new_n": 1, "new_ton": 0.08, "old_n": 18, "old_ton": 1.42, "top_cust": [{"name": "凯旭蔬菜配送", "ton": 0.18}, {"name": "U鲜果", "ton": 0.17}, {"name": "何哥", "ton": 0.14}, {"name": "黄姐", "ton": 0.12}, {"name": "高姐", "ton": 0.12}], "top_item": [{"name": "【品牌】云南一级洗小葱26斤泡沫箱", "cust": 4, "ton": 0.08}, {"name": "【品牌】兰州一级八条西兰花原件小件净重15斤泡沫箱", "cust": 3, "ton": 0.04}, {"name": "云南昭通一级油麦菜大件大颗油麦菜泡沫箱", "cust": 2, "ton": 0.1}, {"name": "【品牌】甘肃一级泡沫箱散花菜35泡沫箱", "cust": 2, "ton": 0.06}, {"name": "云南一级精品牛心白30斤30斤泡沫箱", "cust": 2, "ton": 0.05}], "top_cat": [{"name": "蔬菜", "ton": 1.09}, {"name": "国产水果", "ton": 0.34}, {"name": "酒水饮料", "ton": 0.06}, {"name": "进口精品水果", "ton": 0.02}]}}, {"wh": "宣汉仓", "day_ton": 1.427, "recent3_ton": 1.427, "status": "active", "month_ton": 1.427, "avg_ton": 1.427, "active": 12, "order_cnt": 16, "per_order_ton": 0.0891875, "per_cust_ton": 0.11891666666666667, "r3_base": 12, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 1.427}], "new_n": 0, "new_ton": 0, "old_n": 12, "old_ton": 1.43, "top_cust": [{"name": "陈老板", "ton": 0.51}, {"name": "曾", "ton": 0.35}, {"name": "熊安兵", "ton": 0.16}, {"name": "老板", "ton": 0.11}, {"name": "老板", "ton": 0.06}], "top_item": [{"name": "云南昭通一级油麦菜大件大颗油麦菜泡沫箱", "cust": 2, "ton": 0.1}, {"name": "云南一级水洗白小葱26斤/件泡沫箱", "cust": 2, "ton": 0.07}, {"name": "云南二级油麦菜净重32斤泡沫箱", "cust": 2, "ton": 0.06}, {"name": "重庆一级大号藕30斤泡沫箱", "cust": 2, "ton": 0.06}, {"name": "云南一级筐西红柿粉果带把毛重40-42斤", "cust": 2, "ton": 0.06}], "top_cat": [{"name": "蔬菜", "ton": 1.42}, {"name": "国产水果", "ton": 0.01}]}}, {"wh": "大竹仓", "day_ton": 1.3875, "recent3_ton": 1.387, "status": "active", "month_ton": 1.3875, "avg_ton": 1.3875, "active": 14, "order_cnt": 14, "per_order_ton": 0.09910714285714285, "per_cust_ton": 0.09910714285714285, "r3_base": 14, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 1.387}], "new_n": 10, "new_ton": 0.92, "old_n": 4, "old_ton": 0.46, "top_cust": [{"name": "波波果蔬", "ton": 0.29}, {"name": "江哥", "ton": 0.25}, {"name": "罗姐", "ton": 0.14}, {"name": "杨哥", "ton": 0.13}, {"name": "黄老板", "ton": 0.11}], "top_item": [{"name": "【品牌】云南一级洗小葱26斤泡沫箱", "cust": 4, "ton": 0.1}, {"name": "云南一级大水白菜泡沫箱大件", "cust": 3, "ton": 0.08}, {"name": "陕西二级市场黄心土豆6两起袋净重50斤", "cust": 2, "ton": 0.08}, {"name": "云南昭通一级油麦菜大件大颗油麦菜泡沫箱", "cust": 2, "ton": 0.07}, {"name": "云南一级基地直供生菜大件泡沫箱", "cust": 2, "ton": 0.06}], "top_cat": [{"name": "蔬菜", "ton": 1.28}, {"name": "国产水果", "ton": 0.11}]}}, {"wh": "巫山仓", "day_ton": 1.3055, "recent3_ton": 1.306, "status": "active", "month_ton": 1.3055, "avg_ton": 1.3055, "active": 13, "order_cnt": 13, "per_order_ton": 0.10042307692307693, "per_cust_ton": 0.10042307692307693, "r3_base": 13, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 1.306}], "new_n": 7, "new_ton": 0.76, "old_n": 6, "old_ton": 0.54, "top_cust": [{"name": "郭", "ton": 0.33}, {"name": "云哥", "ton": 0.17}, {"name": "弋老板", "ton": 0.13}, {"name": "陈增兰", "ton": 0.12}, {"name": "李哥", "ton": 0.11}], "top_item": [{"name": "云南昭通一级油麦菜大件大颗油麦菜泡沫箱", "cust": 3, "ton": 0.26}, {"name": "云南二级染红土老姜干姜普通净重37斤袋", "cust": 2, "ton": 0.13}, {"name": "甘肃一级红洋葱粉皮洋葱4两起80斤/袋", "cust": 2, "ton": 0.12}, {"name": "江苏一级大蒜6.5江苏蒜净重40斤袋", "cust": 2, "ton": 0.04}, {"name": "云南一级香菜19斤泡沫箱", "cust": 2, "ton": 0.03}], "top_cat": [{"name": "蔬菜", "ton": 1.28}, {"name": "酒水饮料", "ton": 0.01}, {"name": "国产水果", "ton": 0.01}]}}, {"wh": "铜梁仓", "day_ton": 1.1953, "recent3_ton": 1.195, "status": "active", "month_ton": 1.1953, "avg_ton": 1.1953, "active": 2, "order_cnt": 2, "per_order_ton": 0.59765, "per_cust_ton": 0.59765, "r3_base": 2, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 1.195}], "new_n": 0, "new_ton": 0, "old_n": 2, "old_ton": 1.2, "top_cust": [{"name": "刘颖", "ton": 1.09}, {"name": "金泉超市总账号", "ton": 0.1}], "top_item": [{"name": "云南昭通一级油麦菜大件大颗油麦菜泡沫箱", "cust": 1, "ton": 0.2}, {"name": "云南一级生菜大件泡沫箱", "cust": 1, "ton": 0.14}, {"name": "甘肃天水B级【溶柒森】（新苹果）红富士70—75#", "cust": 1, "ton": 0.1}, {"name": "【品牌】重庆二级二脆莲白50散装", "cust": 1, "ton": 0.1}, {"name": "广西二级仔姜普通仔姜8斤/件泡沫箱", "cust": 1, "ton": 0.09}], "top_cat": [{"name": "蔬菜", "ton": 1.09}, {"name": "国产水果", "ton": 0.1}]}}, {"wh": "忠县仓", "day_ton": 1.0006, "recent3_ton": 1.001, "status": "active", "month_ton": 1.0006, "avg_ton": 1.0006, "active": 16, "order_cnt": 17, "per_order_ton": 0.05885882352941176, "per_cust_ton": 0.0625375, "r3_base": 16, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 1.001}], "new_n": 0, "new_ton": 0, "old_n": 16, "old_ton": 1.0, "top_cust": [{"name": "刘老板", "ton": 0.12}, {"name": "张老板", "ton": 0.12}, {"name": "蒋淑梅", "ton": 0.1}, {"name": "张老板", "ton": 0.09}, {"name": "吴姐1号摊位", "ton": 0.08}], "top_item": [{"name": "【品牌】云南一级洗小葱26斤泡沫箱", "cust": 3, "ton": 0.1}, {"name": "【高复购】陕西二级白萝卜净重59斤袋", "cust": 2, "ton": 0.09}, {"name": "云南一级基地直供生菜大件泡沫箱", "cust": 2, "ton": 0.06}, {"name": "云南一级香菜19斤泡沫箱", "cust": 2, "ton": 0.05}, {"name": "【品牌】山东一级优质黄瓜净重40斤泡沫箱", "cust": 2, "ton": 0.05}], "top_cat": [{"name": "蔬菜", "ton": 0.88}, {"name": "国产水果", "ton": 0.12}]}}, {"wh": "开江仓", "day_ton": 0.6701, "recent3_ton": 0.67, "status": "active", "month_ton": 0.6701, "avg_ton": 0.6701, "active": 7, "order_cnt": 11, "per_order_ton": 0.06091818181818182, "per_cust_ton": 0.09572857142857143, "r3_base": 7, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 0.67}], "new_n": 1, "new_ton": 0.0, "old_n": 6, "old_ton": 0.67, "top_cust": [{"name": "陈总", "ton": 0.25}, {"name": "罗姐", "ton": 0.22}, {"name": "马总", "ton": 0.12}, {"name": "吴老板", "ton": 0.04}, {"name": "蒋姐", "ton": 0.02}], "top_item": [{"name": "云南一级上海青泡沫箱小件", "cust": 2, "ton": 0.04}, {"name": "云南昭通一级油麦菜净重50斤泡沫箱", "cust": 1, "ton": 0.07}, {"name": "甘肃一级红洋葱50斤粉皮洋葱3两起大果袋", "cust": 1, "ton": 0.05}, {"name": "云南二级西红柿四层红果不带把筐净重40斤", "cust": 1, "ton": 0.04}, {"name": "宁夏B级金花一号硒砂瓜石头瓜毛重17-24/斤/个", "cust": 1, "ton": 0.04}], "top_cat": [{"name": "蔬菜", "ton": 0.6}, {"name": "国产水果", "ton": 0.07}]}}, {"wh": "双福自提仓", "day_ton": 0.12, "recent3_ton": 0.12, "status": "active", "month_ton": 0.12, "avg_ton": 0.12, "active": 1, "order_cnt": 1, "per_order_ton": 0.12, "per_cust_ton": 0.12, "r3_base": 1, "r3_repeat": 0, "r3_rate": 0.0, "detail": {"series": [{"day": "09-01", "ton": 0.12}], "new_n": 0, "new_ton": 0, "old_n": 1, "old_ton": 0.12, "top_cust": [{"name": "周", "ton": 0.12}], "top_item": [{"name": "新悦天然泉水24瓶*510ml", "cust": 1, "ton": 0.12}], "top_cat": [{"name": "酒水饮料", "ton": 0.12}]}}], "daily": [{"day": "09-01", "ton": 65.509, "cust": 390}], "new_daily": [{"day": "09-01", "n": 60}], "meta": {"year": 2026, "month": 9, "stat_day": "2026-09-01", "in_progress": "2026-09-02", "grab_time": "2026-09-01 15:54", "member_time": "2026-09-01 15:55", "order_file": "订单_202609.xlsx", "member_file": "会员.xlsx", "as_file": "", "range": "2026-09-01 ~ 2026-09-01", "gen_time": "2026-09-01 15:56"}};</script>
+<script>
+const D = window.__DATA__;
+const fmt = (n, d=2) => Number(n).toLocaleString('zh-CN', {minimumFractionDigits:d, maximumFractionDigits:d});
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function sparkline(el, data, key, color, unit){
+  const w = el.clientWidth || 400, h = 168, pad = {l:38, r:10, t:10, b:22};
+  const max = Math.max(...data.map(d=>d[key])) * 1.12 || 1;
+  const x = i => pad.l + i * (w - pad.l - pad.r) / Math.max(data.length-1, 1);
+  const y = v => h - pad.b - (v / max) * (h - pad.t - pad.b);
+  let g = '';
+  for(let i=0;i<=3;i++){
+    const v = max*i/3, yy = y(v);
+    g += `<line x1="${pad.l}" y1="${yy}" x2="${w-pad.r}" y2="${yy}" stroke="#EEF1F5"/>`;
+    g += `<text x="${pad.l-5}" y="${yy+4}" font-size="9.5" fill="#A0A8B5" text-anchor="end">${v.toFixed(v<10?1:0)}</text>`;
+  }
+  let path = '', dots = '';
+  data.forEach((d,i)=>{
+    path += (i?'L':'M') + x(i) + ',' + y(d[key]);
+    dots += `<circle cx="${x(i)}" cy="${y(d[key])}" r="3" fill="${color}">
+      <title>${d.day}  ${d[key].toFixed(2)}${unit}</title></circle>`;
+  });
+  const area = path + `L${x(data.length-1)},${h-pad.b}L${x(0)},${h-pad.b}Z`;
+  const step = Math.ceil(data.length / 6);
+  let labels = '';
+  data.forEach((d,i)=>{ if(i%step===0 || i===data.length-1)
+    labels += `<text x="${x(i)}" y="${h-6}" font-size="9.5" fill="#A0A8B5" text-anchor="middle">${d.day}</text>`; });
+  el.innerHTML = `<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}">
+    ${g}<path d="${area}" fill="${color}" opacity="0.10"/>
+    <path d="${path}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linejoin="round"/>${dots}${labels}</svg>`;
+}
+
+function bars(el, data, key, color, unit){
+  const w = el.clientWidth || 400, h = 168, pad = {l:34, r:10, t:10, b:22};
+  const max = Math.max(...data.map(d=>d[key])) * 1.12 || 1;
+  const bw = (w - pad.l - pad.r) / data.length;
+  let s = '';
+  for(let i=0;i<=3;i++){
+    const v = max*i/3, yy = h - pad.b - (v/max)*(h-pad.t-pad.b);
+    s += `<line x1="${pad.l}" y1="${yy}" x2="${w-pad.r}" y2="${yy}" stroke="#EEF1F5"/>`;
+    s += `<text x="${pad.l-5}" y="${yy+4}" font-size="9.5" fill="#A0A8B5" text-anchor="end">${Math.round(v)}</text>`;
+  }
+  const step = Math.ceil(data.length / 6);
+  data.forEach((d,i)=>{
+    const bh = (d[key]/max)*(h-pad.t-pad.b);
+    s += `<rect x="${pad.l+i*bw+0.8}" y="${h-pad.b-bh}" width="${Math.max(bw-1.6,1)}" height="${bh}"
+      fill="${color}" rx="1.5"><title>${d.day}  ${d[key]}${unit}</title></rect>`;
+    if(i%step===0 || i===data.length-1)
+      s += `<text x="${pad.l+i*bw+bw/2}" y="${h-6}" font-size="9.5" fill="#A0A8B5" text-anchor="middle">${d.day}</text>`;
+  });
+  el.innerHTML = `<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}">${s}</svg>`;
+}
+
+function renderTotal(){
+  const t = D.total;
+  // 总看板统计「全部数据」口径：月活 / 转化 / 复购都按全部仓算，
+  // 关仓仓的历史数据一并计入；经营仓数单独作为一项展示
+  const cards = [
+    ['月累计吨位', fmt(t.ton), '吨', `日均 ${fmt(t.avg_day_ton)} 吨 · ${t.days}个供货日`, 'main'],
+    ['新开客户', t.new_cust, '户', `首单在本月`, ''],
+    ['月活客户', t.month_active, '户', `本月下过单`, ''],
+    ['首单转化率', (t.first_conv*100).toFixed(1), '%', `新开${t.new_cust} · 会员${t.new_member}`, 'o'],
+    ['3日复购率', (t.r3.rate*100).toFixed(1), '%', `复购${t.r3.repeat} · 下单${t.r3.base}`, 'o'],
+  ];
+  document.getElementById('cards').innerHTML = cards.map(c=>
+    `<div class="card ${c[4]}"><div class="k">${c[0]}</div>
+     <div class="v">${c[1]}<span class="u">${c[2]}</span></div><div class="s">${c[3]}</div></div>`).join('');
+  sparkline(document.getElementById('chartTon'), D.daily, 'ton', '#4472C4', ' 吨');
+  bars(document.getElementById('chartNew'), D.new_daily, 'n', '#E97132', ' 户');
+}
+
+function renderWh(){
+  const rows = D.wh.slice();
+  const t = D.total;
+  const maxTon = Math.max(...rows.map(r=>r.month_ton));
+  document.getElementById('sumRow').innerHTML = [
+    [fmt(t.ton), `月累计吨位 · ${t.days}天`],
+    [t.month_active, '月活客户'],
+    [`${t.wh_active_n}`, `经营仓数`],
+  ].map(x=>`<div><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');
+
+  const draw = (key) => {
+    const sorted = rows.slice().sort((a,b)=> b[key] - a[key]);
+    document.getElementById('whList').innerHTML = sorted.map(w=>{
+      const closed = (w.status === 'closed');
+      // 只给已关仓加标识，在营仓是常态不再标「在营」
+      const chip = closed
+        ? `<span class="wh-chip closed" title="近 3 个已结束供货日无吨位">已关仓</span>`
+        : '';
+      return `<div class="whcard ${closed?'wh-closed':''}" data-wh="${esc(w.wh)}">
+        <div class="wh-top">
+          <span class="wh-name">${esc(w.wh)} ${chip}</span>
+          <span class="wh-ton">${fmt(w.month_ton)}<em>吨</em></span>
+        </div>
+        <div class="bar"><i style="width:${(w.month_ton/maxTon*100).toFixed(1)}%"></i></div>
+        <div class="wh-grid">
+          <div><b>${fmt(w.day_ton)}</b><span>今日吨位</span></div>
+          <div><b>${fmt(w.avg_ton)}</b><span>日均吨位</span></div>
+          <div><b>${w.active}</b><span>月活</span></div>
+          <div><b>${fmt(w.per_order_ton,3)}</b><span>客单(吨)</span></div>
+        </div>
+        <div class="wh-grid" style="margin-top:6px">
+          <div><b>${(w.r3_rate*100).toFixed(1)}%</b><span>3日复购</span></div>
+          <div><b>${w.r3_repeat}/${w.r3_base}</b><span>复购／下单</span></div>
+          <div><b>${fmt(w.per_cust_ton,3)}</b><span>人均(吨)</span></div>
+          <div><b>${w.order_cnt}</b><span>订单数</span></div>
+        </div>
+        ${closed ? `<div class="wh-closed-note">历史仓 · 月累计 ${fmt(w.month_ton)} 吨已保留</div>` : ''}
+        <div class="wh-more">详情</div>
+      </div>`;}).join('');
+    document.querySelectorAll('.whcard').forEach(c=>{
+      c.onclick = ()=> openDetail(c.dataset.wh);
+    });
+  };
+  draw('month_ton');
+  document.querySelectorAll('.sort').forEach(b=>{
+    b.onclick = ()=>{
+      document.querySelectorAll('.sort').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      draw(b.dataset.k);
+    };
+  });
+}
+
+function openDetail(name){
+  const w = D.wh.find(x => x.wh === name);
+  if(!w) return;
+  const t = D.total, d = w.detail;
+  const totC = d.new_n + d.old_n;
+  const totT = d.new_ton + d.old_ton;
+  const np = totC ? d.new_n / totC * 100 : 0;
+  const nt = totT ? d.new_ton / totT * 100 : 0;
+  document.getElementById('shT').textContent = w.wh + (w.status === 'closed' ? ' · 已关仓' : '');
+  document.getElementById('shS').textContent =
+    `月累计 ${fmt(w.month_ton)} 吨 · 月活 ${w.active} 户 · 订单 ${w.order_cnt} 单` +
+    (w.status === 'closed' ? ` · 近 3 个供货日合计 ${fmt(w.recent3_ton,3)} 吨` : '');
+  document.getElementById('shKpi').innerHTML = [
+    [fmt(w.month_ton), '月累计吨位'], [fmt(w.avg_ton), '日均吨位'],
+    [fmt(w.per_order_ton,3), '客单(吨)'], [(w.r3_rate*100).toFixed(1)+'%', '3日复购'],
+  ].map(x=>`<div><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');
+  document.getElementById('shNewOld').innerHTML = `
+    <div class="newold">
+      <i style="width:${np.toFixed(1)}%;background:#E97132">${d.new_n ? d.new_n+' 新客' : ''}</i>
+      <i style="width:${(100-np).toFixed(1)}%;background:#4472C4">${d.old_n ? d.old_n+' 老客' : ''}</i>
+    </div>
+    <div class="no-legend">
+      <span><em style="background:#E97132"></em>新客 ${d.new_n} 户 · ${fmt(d.new_ton)} 吨（占 ${nt.toFixed(0)}%）</span>
+      <span><em style="background:#4472C4"></em>老客 ${d.old_n} 户 · ${fmt(d.old_ton)} 吨（占 ${(100-nt).toFixed(0)}%）</span>
+    </div>`;
+  const rank = (arr, valFn, unit) => arr.length
+    ? `<ul class="rank">` + arr.map((x,i)=>
+        `<li><span class="rk">${i+1}</span><span class="rn">${esc(x.name)}</span>
+         <span class="rv">${valFn(x)}${unit}</span></li>`).join('') + `</ul>`
+    : `<div class="sh-empty">暂无数据</div>`;
+  document.getElementById('shCust').innerHTML = rank(d.top_cust, x=>fmt(x.ton), ' 吨');
+  // TOP 商品按「下过该商品的客户数」排序展示
+  document.getElementById('shItem').innerHTML = rank(d.top_item, x=>x.cust, ' 户');
+  document.getElementById('shCat').innerHTML  = rank(d.top_cat,  x=>fmt(x.ton), ' 吨');
+  document.getElementById('mask').classList.add('on');
+  document.getElementById('sheet').classList.add('on');
+  // 等弹层动画开始、容器有宽度后再画折线
+  setTimeout(()=> sparkline(document.getElementById('shChart'), d.series, 'ton', '#C55A11', ' 吨'), 60);
+}
+
+function closeDetail(){
+  document.getElementById('sheet').classList.remove('on');
+  document.getElementById('mask').classList.remove('on');
+}
+
+window.onload = ()=>{
+  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
+    document.getElementById(t.dataset.p).classList.add('on');
+  });
+  renderTotal(); renderWh();
+  let rt; window.addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(renderTotal,200); });
+};
+</script>
+</body></html>
