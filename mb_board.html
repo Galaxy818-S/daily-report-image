@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>橙选集配 · 9月目标看板</title>
+<style>
+:root{
+  --txt:#17233d; --txt2:#4a5878; --txt3:#8a94ad;
+  --card:#ffffff; --cardb:#e4e9f5;
+  --ok:#16a34a; --warn:#eab308; --mid:#f97316; --bad:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  min-height:100vh;
+  background:linear-gradient(180deg,#eaf1ff 0%,#f6f8ff 40%,#ffffff 100%);
+  color:var(--txt);
+  font-family:"Microsoft YaHei","PingFang SC",-apple-system,"Segoe UI",Arial,sans-serif;
+  font-size:13px;padding:14px 20px 20px;
+}
+/* ---------- header ---------- */
+.hd{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.hd h1{font-size:19px;font-weight:800;letter-spacing:.5px;color:var(--txt)}
+.hd .sub{color:var(--txt3);font-size:11px;margin-top:2px}
+.hd .spacer{flex:1}
+.hdst{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--cardb);border-radius:14px;padding:6px 14px;box-shadow:0 3px 10px rgba(30,60,120,.07)}
+.ring{position:relative;width:52px;height:52px}
+.ring svg{transform:rotate(-90deg)}
+.ring .rv{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--txt)}
+.hdst .lb{font-size:10px;color:var(--txt3)}
+.hdst .vv{font-size:13px;font-weight:700;color:var(--txt)}
+/* ---------- section ---------- */
+.sec{margin-bottom:12px}
+.sec-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.sec-h .ic{width:10px;height:10px;border-radius:3px}
+.sec-h h2{font-size:14px;font-weight:800;letter-spacing:.5px;color:var(--txt)}
+.sec-h .line{flex:1;height:2px;background:linear-gradient(90deg,#dfe6f5,transparent);border-radius:2px}
+/* ---------- kpi card ---------- */
+.grid{display:grid;gap:10px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.kpi{position:relative;background:var(--card);border:1px solid var(--cardb);border-radius:14px;padding:12px 14px;box-shadow:0 3px 10px rgba(30,60,120,.06);overflow:hidden}
+.kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--ac,#ff7a3d)}
+.kpi .k{font-size:12px;color:var(--txt2);letter-spacing:.5px;font-weight:600}
+.kpi .v{font-size:28px;font-weight:800;margin:5px 0 0;font-variant-numeric:tabular-nums;line-height:1.05;color:var(--txt)}
+.kpi .v small{font-size:11px;color:var(--txt3);font-weight:400;margin-left:4px}
+.kpi .av{font-size:11.5px;color:var(--txt3);margin-top:5px}
+.kpi .av b{color:var(--txt2);font-variant-numeric:tabular-nums;font-weight:600}
+.kpi .r{position:absolute;top:12px;right:12px;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:800}
+.bar{position:relative;height:8px;border-radius:5px;background:#e8edf7;margin-top:10px}
+.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.bar .mark{position:absolute;top:-3px;bottom:-3px;width:2px;background:#17233d;opacity:.5;border-radius:2px}
+/* ---------- BD group card ---------- */
+.bdcard{background:var(--card);border:1px solid var(--cardb);border-radius:14px;padding:12px 14px;box-shadow:0 3px 10px rgba(30,60,120,.06)}
+.bdcard .bh{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.bdcard .bn{font-size:15px;font-weight:800;color:var(--txt)}
+.bdcard .bm{font-size:11px;color:var(--txt3)}
+.bdcard .brr{margin-left:auto;font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px}
+.mi{display:grid;grid-template-columns:56px 1fr 52px;align-items:center;gap:8px;padding:5px 0;border-top:1px solid #eef2fa}
+.mi .mk{font-size:11px;color:var(--txt3)}
+.mi .mv{display:flex;justify-content:space-between;font-size:12px;color:var(--txt2)}
+.mi .mv b{color:var(--txt);font-variant-numeric:tabular-nums;font-weight:700}
+.mi .mr{text-align:right;font-size:11.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.mi .tb{position:relative;height:5px;border-radius:3px;background:#e8edf7;overflow:hidden;grid-column:2/4}
+.mi .tb i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+/* ---------- footer ---------- */
+.ft{margin-top:12px;color:var(--txt3);font-size:10.5px;line-height:1.7;text-align:center}
+@media (max-width:900px){.g3{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.g3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div>
+    <h1>橙选集配 · 9月目标看板</h1>
+    <div class="sub" id="subTxt"></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="hdst">
+    <div class="ring"><svg width="52" height="52"><circle cx="26" cy="26" r="21" fill="none" stroke="#e8edf7" stroke-width="6"/><circle id="ringA" cx="26" cy="26" r="21" fill="none" stroke="#16a34a" stroke-width="6" stroke-linecap="round" stroke-dasharray="131.9" stroke-dashoffset="131.9"/></svg><div class="rv" id="ringV">—</div></div>
+    <div>
+      <div class="lb">整体目标达成</div>
+      <div class="vv" id="ringSum">20 项指标</div>
+    </div>
+  </div>
+</div>
+
+<!-- 城市仓 -->
+<div class="sec">
+  <div class="sec-h"><span class="ic" style="background:linear-gradient(135deg,#ff9d4d,#ff5a1f)"></span><h2>城市仓</h2><span class="line"></span></div>
+  <div class="grid g3" id="cityGrid"></div>
+</div>
+
+<!-- BD小组 -->
+<div class="sec">
+  <div class="sec-h"><span class="ic" style="background:linear-gradient(135deg,#a78bfa,#7c3aed)"></span><h2>BD小组</h2><span class="line"></span></div>
+  <div class="grid g3" id="bdGrid"></div>
+</div>
+
+<!-- 销售 -->
+<div class="sec">
+  <div class="sec-h"><span class="ic" style="background:linear-gradient(135deg,#38bdf8,#0284c7)"></span><h2>销售</h2><span class="line"></span></div>
+  <div class="grid g3" id="salGrid"></div>
+</div>
+
+<div class="ft" id="ftTxt"></div>
+
+<script>
+/* ============ 目标数据（来自 工作簿1.xlsx） ============ */
+const CITY_T={ton:54.8614*30,pcs:3840.3*30,mau:2755};
+const BD_T={
+ "一组":{m:"黄金",reg:1000,nw:450,mau:1019,ton:703.1,pcs:49217},
+ "二组":{m:"唐海金",reg:1000,nw:450,mau:777,ton:407.55,pcs:28528.5},
+ "三组":{m:"唐月",reg:1000,nw:450,mau:753,ton:378.8,pcs:26516}
+};
+const SAL_T={nw:1350,ton:1486.8};
+
+/* ===== 实际值（由 统计实际值.py 生成嵌入）===== */
+const EMBED={"city":{"遂宁仓":{"ton":33.62,"pcs":2400,"mau":59,"dau":21.5},"合川仓":{"ton":20.98,"pcs":1491,"mau":50,"dau":22.2},"开州仓":{"ton":41.84,"pcs":2872,"mau":70,"dau":30.0},"涪陵仓":{"ton":14.74,"pcs":946,"mau":41,"dau":14.9},"巴中仓":{"ton":53.8,"pcs":3030,"mau":60,"dau":36.1},"黔江仓":{"ton":11.92,"pcs":895,"mau":42,"dau":20.9},"达州仓":{"ton":23.14,"pcs":1643,"mau":71,"dau":31.9},"渠县仓":{"ton":21.73,"pcs":1281,"mau":63,"dau":26.6},"忠县仓":{"ton":11.37,"pcs":706,"mau":43,"dau":18.1},"云阳仓":{"ton":6.91,"pcs":476,"mau":38,"dau":9.1},"彭水仓":{"ton":29.79,"pcs":1937,"mau":38,"dau":22.9},"梁平仓":{"ton":6.94,"pcs":464,"mau":42,"dau":10.0},"广安仓":{"ton":33.65,"pcs":1402,"mau":48,"dau":16.4},"城口仓":{"ton":8.52,"pcs":636,"mau":35,"dau":13.0},"巫溪仓":{"ton":2.15,"pcs":141,"mau":28,"dau":3.5},"大足仓":{"ton":13.47,"pcs":798,"mau":18,"dau":10.4},"仪陇仓":{"ton":0.74,"pcs":59,"mau":11,"dau":1.4},"奉节仓":{"ton":13.67,"pcs":830,"mau":55,"dau":16.5},"宣汉仓":{"ton":11.4,"pcs":995,"mau":24,"dau":11.8},"万州仓":{"ton":15.89,"pcs":1075,"mau":46,"dau":18.8},"南充仓":{"ton":25.55,"pcs":1661,"mau":99,"dau":19.4},"开江仓":{"ton":2.93,"pcs":200,"mau":18,"dau":6.9},"大竹仓":{"ton":7.67,"pcs":459,"mau":29,"dau":7.9},"铜梁仓":{"ton":9.02,"pcs":642,"mau":3,"dau":1.5},"双福自提仓":{"ton":6.69,"pcs":137,"mau":15,"dau":2.2},"巫山仓":{"ton":4.34,"pcs":274,"mau":36,"dau":8.1},"万源配送仓":{"ton":0.02,"pcs":8,"mau":1,"dau":0.1},"广安岳池仓":{"ton":0.02,"pcs":1,"mau":1,"dau":0.1},"南川仓":{"ton":13.3,"pcs":589,"mau":1,"dau":0.1}},"bd":{"一组":{"reg":398,"nw":139,"mau":431,"dau":156.6,"ton":167.6,"pcs":11115},"二组":{"reg":120,"nw":56,"mau":330,"dau":139.9,"ton":138.8,"pcs":8750},"三组":{"reg":135,"nw":32,"mau":295,"dau":101.8,"ton":118.62,"pcs":7389}},"sal":{"董嘉豪":{"ton":21.0,"dau":12.2,"nw":8},"游宗伟":{"ton":0.4,"dau":1.1,"nw":5},"李顺":{"ton":34.36,"dau":26.6,"nw":15},"蒋宏伟":{"ton":8.23,"dau":13.5,"nw":10},"李彬":{"ton":33.22,"dau":24.5,"nw":8},"龚勇铭":{"ton":23.47,"dau":15.6,"nw":16},"未分配":{"ton":101.2,"dau":53.9,"nw":0},"彭彪":{"ton":12.54,"dau":18.5,"nw":18},"樊强":{"ton":12.31,"dau":12.6,"nw":6},"邹叶华":{"ton":10.38,"dau":12.5,"nw":3},"雷璐莲":{"ton":5.74,"dau":11.0,"nw":0},"魏大尉":{"ton":22.57,"dau":18.6,"nw":7},"秦双林":{"ton":9.92,"dau":15.2,"nw":15},"徐杰":{"ton":9.84,"dau":14.5,"nw":8},"吴波":{"ton":0.94,"dau":1.5,"nw":0},"韦磊":{"ton":15.2,"dau":15.9,"nw":13},"邓富元":{"ton":11.4,"dau":14.0,"nw":9},"刘诗道":{"ton":7.58,"dau":6.6,"nw":1},"段昂":{"ton":9.75,"dau":10.4,"nw":1},"刘艳":{"ton":4.29,"dau":4.8,"nw":6},"杨松":{"ton":17.07,"dau":18.6,"nw":7},"谭东伟":{"ton":3.5,"dau":6.1,"nw":0},"赵帅":{"ton":3.76,"dau":6.1,"nw":2},"林夏":{"ton":3.23,"dau":5.4,"nw":4},"乾坤":{"ton":24.42,"dau":14.9,"nw":13},"张继凯":{"ton":15.95,"dau":23.0,"nw":22},"贺健康":{"ton":12.9,"dau":12.4,"nw":12},"李东泽":{"ton":2.99,"dau":2.4,"nw":1},"谢华驰":{"ton":0.71,"dau":1.8,"nw":9},"陈登辉":{"ton":2.75,"dau":3.5,"nw":0},"陈健":{"ton":2.1,"dau":2.4,"nw":1},"张渝川":{"ton":1.36,"dau":1.8,"nw":6},"王平":{"ton":0.03,"dau":0.1,"nw":1},"姜涛":{"ton":0.1,"dau":0.2,"nw":0},"裴智":{"ton":0.18,"dau":0.1,"nw":0},"张佑银":{"ton":0.24,"dau":0.4,"nw":0},"钟玉山":{"ton":0.06,"dau":0.1,"nw":0},"韩滨澳":{"ton":0.09,"dau":0.1,"nw":0}},"_city_tot":{"ton":445.79,"pcs":28048,"mau":1085},"_sal_tot":{"ton":445.79,"nw":261},"_stamp":"2026/09/08 16:55","_lastpay":"2026-09-08 14:52","_days":8};
+
+/* ============ 工具 ============ */
+const num=(v,d=0)=>v==null?"-":Number(v).toFixed(d).replace(/\.0+$/,"").replace(/(\.\d*?)0+$/,"$1");
+const rate=(a,t)=>t>0&&a!=null?a/t*100:0;
+const cap=r=>Math.min(100,r);
+const cls=r=>r>=100?"ok":r>=80?"warn":r>=60?"mid":"bad";
+const col=r=>({ok:"#16a34a",warn:"#eab308",mid:"#f97316",bad:"#ef4444"})[cls(r)];
+const bg=r=>({ok:"#dcfce7",warn:"#fef9c3",mid:"#ffedd5",bad:"#fee2e2"})[cls(r)];
+const cval=(o,k)=>o&&o[k]!=null?o[k]:0;
+const DAYS=30, DUE=(EMBED._days||8)/30*100;
+
+/* 大数字=实际值，目标为小字附注 */
+function kpi(el,{k,t,a,u,d=0,ac}){
+  const r=rate(a,t);
+  el.innerHTML+=`
+  <div class="kpi" style="--ac:${ac}">
+    <div class="k">${k}</div>
+    <div class="v">${a!=null?num(a,d):"—"}<small>${u}</small></div>
+    <div class="av">目标 <b>${num(t,d)} ${u}</b></div>
+    <span class="r" style="background:${bg(r)};color:${col(r)}">${a!=null?cap(r).toFixed(1)+"%":"—"}</span>
+    <div class="bar"><i style="width:${cap(r)}%;background:${col(r)}"></i>
+      <div class="mark" style="left:${DUE}%"></div></div>
+  </div>`;
+}
+
+/* ============ 城市仓（全量合计，月活已去重） ============ */
+const CT=EMBED._city_tot||{};
+const cA={ton:CT.ton,pcs:CT.pcs,mau:CT.mau};
+const cg=document.getElementById("cityGrid");
+kpi(cg,{k:"9月吨位",t:CITY_T.ton,a:cA.ton,u:"吨",d:2,ac:"linear-gradient(90deg,#ff9d4d,#ff5a1f)"});
+kpi(cg,{k:"9月件数",t:CITY_T.pcs,a:cA.pcs,u:"件",d:0,ac:"linear-gradient(90deg,#fbbf24,#f59e0b)"});
+kpi(cg,{k:"月活（去重下单客户）",t:CITY_T.mau,a:cA.mau,u:"家",d:0,ac:"linear-gradient(90deg,#fb923c,#ea580c)"});
+
+/* ============ BD 小组 ============ */
+const bdGrid=document.getElementById("bdGrid");
+const BM=[["注册","reg",0],["新开","nw",0],["月活","mau",0],["吨位","ton",2],["件数","pcs",0]];
+Object.keys(BD_T).forEach(g=>{
+  const T=BD_T[g], A=EMBED.bd&&EMBED.bd[g]||{};
+  let rows="",vals=[];
+  BM.forEach(([label,key,d])=>{
+    const t=T[key],a=cval(A,key),r=rate(a,t); vals.push(r);
+    rows+=`<div class="mi"><div class="mk">${label}</div>
+      <div class="mv"><b>${num(a,d)}</b><span>目标 ${num(t,d)}</span></div>
+      <div class="mr" style="color:${col(r)}">${cap(r).toFixed(1)}%</div>
+      <div class="tb"><i style="width:${cap(r)}%;background:${col(r)}"></i></div></div>`;
+  });
+  const avg=vals.reduce((a,b)=>a+cap(b),0)/vals.length;
+  bdGrid.innerHTML+=`<div class="bdcard">
+    <div class="bh"><span class="bn">${g}</span><span class="bm">BDM · ${T.m}</span>
+      <span class="brr" style="background:${bg(avg)};color:${col(avg)}">${avg.toFixed(1)}%</span></div>
+    ${rows}</div>`;
+});
+
+/* ============ 销售 ============ */
+const ST=EMBED._sal_tot||{};
+const sA={ton:ST.ton,nw:ST.nw};
+const sg=document.getElementById("salGrid");
+kpi(sg,{k:"新开（9月注册客户开单）",t:SAL_T.nw,a:sA.nw,u:"家",d:0,ac:"linear-gradient(90deg,#38bdf8,#0284c7)"});
+kpi(sg,{k:"9月吨位",t:SAL_T.ton,a:sA.ton,u:"吨",d:2,ac:"linear-gradient(90deg,#22d3ee,#0891b2)"});
+
+/* ============ 顶部总环（20项等权） ============ */
+let all=[cA.ton/CITY_T.ton,cA.pcs/CITY_T.pcs,cA.mau/CITY_T.mau,
+         sA.nw/SAL_T.nw,sA.ton/SAL_T.ton];
+Object.keys(BD_T).forEach(g=>{
+  const A=EMBED.bd&&EMBED.bd[g]||{};
+  BM.forEach(([_,k])=>all.push(cval(A,k)/BD_T[g][k]));
+});
+const ov=all.reduce((a,b)=>a+Math.min(100,b*100),0)/all.length;
+document.getElementById("ringV").textContent=ov.toFixed(0)+"%";
+document.getElementById("ringA").setAttribute("stroke-dashoffset",131.9-131.9*cap(ov)/100);
+document.getElementById("ringA").setAttribute("stroke",col(ov));
+document.getElementById("ringSum").textContent=`${all.length} 项指标`;
+
+document.getElementById("subTxt").textContent=`实际值截至 ${EMBED._lastpay||"—"} · ${EMBED._days||"—"} 个供货日`;
+document.getElementById("ftTxt").innerHTML=
+ `完成率封顶100% · ≥100% 绿 / 80–99% 黄 / 60–79% 橙 / &lt;60% 红 · 深色刻度为月进度（${EMBED._days||8}/${DAYS}）· 城市仓/销售为全公司合计 · 生成 ${EMBED._stamp||"—"}`;
+</script>
+</body>
+</html>
