@@ -1,5 +1,5 @@
 {
-  "BD 日报": "bd_latest.png",
-  "城市仓日报": "wh_latest.png",
-  "招商日报": "zs_latest.png"
+  "BD 日报": "daily_report/bd_latest.png",
+  "城市仓日报": "daily_report/wh_latest.png",
+  "招商日报": "daily_report/zs_latest.png"
 }
