@@ -1,0 +1,270 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>四组 · BD 拜访看板 · 主管：唐海金（2026-09-18）</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*{box-sizing:border-box}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;margin:0;background:#EEF2F7;color:#222}
+.head{background:#1F4E79;color:#fff;padding:24px 28px}
+.head h1{margin:0;font-size:26px}
+.head .sub{margin-top:6px;color:#D2E0EB;font-size:14px}
+.wrap{max-width:1080px;margin:0 auto;padding:20px}
+.cards{display:flex;gap:14px;margin-bottom:18px}
+.card{flex:1;background:#fff;border:1px solid #D7E0EA;border-radius:10px;padding:16px}
+.card .v{font-size:34px;font-weight:700;color:#D85A30}
+.card .u{font-size:16px;color:#D85A30;margin-left:4px}
+.card .l{color:#777;font-size:13px;margin-top:6px}
+.section{background:#fff;border:1px solid #D7E0EA;border-radius:10px;padding:16px;margin-bottom:18px;overflow-x:auto}
+.section h2{font-size:17px;margin:0 0 10px;color:#1F4E79}
+.dist{color:#666;font-size:14px}
+.chart{margin:6px 0 2px}
+.crow{display:flex;align-items:flex-end;gap:10px;height:120px}
+.col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.bv{font-size:20px;font-weight:700;color:#D85A30;margin-bottom:4px;font-variant-numeric:tabular-nums}
+.bar{width:62%;max-width:38px;min-height:4px;background:linear-gradient(180deg,#E8805A,#D85A30);border-radius:5px 5px 0 0}
+.xl{font-size:14px;color:#667;margin-top:5px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{background:#1F4E79;color:#fff;text-align:left;padding:9px 12px;font-size:14px;vertical-align:middle}
+td{padding:9px 12px;border-bottom:1px solid #E8EEF4;vertical-align:middle}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums;font-size:16px;font-weight:700}
+th.c,td.c{text-align:center}
+td.orange{color:#D85A30;font-weight:700;font-size:16px}
+td.span{font-size:16px;font-weight:600;color:#1F4E79;white-space:nowrap}
+.foot{color:#888;font-size:12px;text-align:center;padding:16px}
+#mask{display:none;position:fixed;inset:0;background:rgba(20,40,60,.55);z-index:50;
+  align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
+#mask.show{display:flex}
+.box{background:#fff;border-radius:12px;max-width:820px;width:100%;max-height:calc(100vh - 32px);overflow:auto;
+  box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.box .bh{background:#1F4E79;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.box .bh h3{margin:0;font-size:18px}
+.box .bh .x{cursor:pointer;font-size:22px;line-height:1;opacity:.85}
+.box .meta{padding:12px 20px 0;color:#555;font-size:13px}
+.box .meta b{color:#D85A30}
+.box img.route{display:block;width:100%;height:auto;padding:14px 20px;box-sizing:border-box}
+#rMap{height:300px}
+.box table.st{width:100%;border-collapse:collapse;font-size:13px;margin:0 0 16px}
+.box table.st th{background:#F2F6FB;color:#1F4E79;position:static}
+.box table.st td{border-bottom:1px solid #EDF1F5}
+.box table.st .n{width:40px;text-align:center;color:#1F4E79;font-weight:700}
+.box table.st .t{width:70px;text-align:center;font-variant-numeric:tabular-nums}
+.leaflet-tooltip.segdist{background:rgba(255,255,255,.9);border:none;box-shadow:0 1px 3px rgba(0,0,0,.25);font-size:11px;color:#1F4E79;font-weight:700;padding:1px 5px;border-radius:4px}
+.leaflet-tooltip.segdist::before{display:none}
+@media (max-width:640px){
+  .head{padding:16px}
+  .head h1{font-size:21px}
+  .head .sub{font-size:12px;line-height:1.5}
+  .wrap{padding:12px}
+  .cards{flex-wrap:wrap;gap:10px}
+  .card{flex:1 1 46%;min-width:0;padding:12px}
+  .card .v{font-size:26px}
+  .card .u{font-size:14px}
+  .card .l{font-size:12px}
+  .section{padding:12px}
+  .section h2{font-size:16px}
+  /* 手机端：BD 明细表恢复按行分布（每行一个 BD），列宽填满屏宽、不左右滑屏 */
+  table.bd{display:table;width:100%;table-layout:fixed;font-size:12px}
+  table.bd thead{display:table-header-group}
+  table.bd tbody{display:table-row-group}
+  table.bd tr{display:table-row}
+  table.bd th,table.bd td{display:table-cell;padding:7px 5px;font-size:12px;
+    border-bottom:1px solid #EDF1F5;white-space:normal;word-break:break-word;overflow-wrap:anywhere;vertical-align:middle}
+  table.bd th{font-size:12px}
+  table.bd td::before{content:none}
+  table.bd td.num{text-align:right;font-size:14px}
+  table.bd td.orange{text-align:right;font-size:14px;color:#D85A30}
+  table.bd td.c{text-align:center}
+  table.bd td.span{text-align:center;font-size:13px;color:#1F4E79;font-weight:600}
+  /* 按行表格列宽：BD/客户数收窄、时间段/轨迹给足空间，避免被挤缩 */
+  table.bd th:nth-child(1),table.bd td:nth-child(1){width:20%}
+  table.bd th:nth-child(2),table.bd td:nth-child(2){width:14%}
+  table.bd th:nth-child(3),table.bd td:nth-child(3){width:18%}
+  table.bd th:nth-child(4),table.bd td:nth-child(4){width:28%}
+  table.bd th:nth-child(5),table.bd td:nth-child(5){width:20%}
+  /* 表头与居中列禁止换行：客户数/查看详情不再挤成两行 */
+  table.bd th{white-space:nowrap;padding:7px 4px}
+  table.bd td{padding:7px 4px}
+  table.bd td.c{white-space:nowrap}
+  #rMap{height:220px;margin:0 16px 10px !important}
+  .box{max-width:100%}
+  .box img.route{padding:12px}
+  .box .bh h3{font-size:16px}
+  .box .meta{padding:10px 16px 0;font-size:12px;line-height:1.5;white-space:normal;word-break:break-word;overflow-wrap:anywhere}
+  /* 逐站表：长地址换行，禁止横向溢出 */
+  .box table.st{display:table;width:100%}
+  .box table.st th,.box table.st td{white-space:normal;word-break:break-word;overflow-wrap:anywhere;vertical-align:top;padding:7px 8px;font-size:12px}
+  .box table.st .n{width:30px}
+  .box table.st .t{width:58px}
+  /* 手机端：时段分布图压低，避免占太多纵向空间 */
+  .crow{height:104px;gap:6px}
+  .bv{font-size:24px;margin-bottom:4px}
+  .xl{font-size:16px;margin-top:5px}
+  .bar{width:72%;max-width:32px}
+}
+</style></head><body>
+<div class="head"><h1>四组 · BD 拜访看板 · 主管：唐海金</h1>
+<div class="sub">统计日期 2026-09-18　|　15 人　|　数据来源：钉钉签到</div></div>
+<div class="wrap">
+<div class="cards">
+<div class="card"><div><span class="v">90</span><span class="u">家</span></div><div class="l">拜访客户数</div></div><div class="card"><div><span class="v">59.53</span><span class="u">km</span></div><div class="l">拜访里程</div></div><div class="card"><div><span class="v">6.0</span><span class="u">家</span></div><div class="l">人均拜访</div></div><div class="card"><div><span class="v">59min</span><span class="u"></span></div><div class="l">平均拜访间隔</div></div>
+</div>
+<div class="section"><h2>拜访时段分布</h2><div class="chart"><div class="crow"><div class="col"><span class="bv">1</span><div class="bar" style="height:7px"></div><span class="xl">07时</span></div><div class="col"><span class="bv">14</span><div class="bar" style="height:44px"></div><span class="xl">08时</span></div><div class="col"><span class="bv">12</span><div class="bar" style="height:38px"></div><span class="xl">09时</span></div><div class="col"><span class="bv">14</span><div class="bar" style="height:44px"></div><span class="xl">10时</span></div><div class="col"><span class="bv">16</span><div class="bar" style="height:50px"></div><span class="xl">11时</span></div><div class="col"><span class="bv">10</span><div class="bar" style="height:33px"></div><span class="xl">12时</span></div><div class="col"><span class="bv">4</span><div class="bar" style="height:16px"></div><span class="xl">13时</span></div><div class="col"><span class="bv">1</span><div class="bar" style="height:7px"></div><span class="xl">14时</span></div><div class="col"><span class="bv">3</span><div class="bar" style="height:13px"></div><span class="xl">15时</span></div><div class="col"><span class="bv">5</span><div class="bar" style="height:18px"></div><span class="xl">16时</span></div><div class="col"><span class="bv">7</span><div class="bar" style="height:24px"></div><span class="xl">17时</span></div><div class="col"><span class="bv">2</span><div class="bar" style="height:10px"></div><span class="xl">18时</span></div><div class="col"><span class="bv">1</span><div class="bar" style="height:7px"></div><span class="xl">19时</span></div></div></div></div>
+<div class="section"><h2>BD 拜访明细（15 人 / 签到 9 人）</h2>
+<table class="bd"><thead><tr><th>BD</th><th class="num">客户数</th><th class="num">拜访距离</th><th class="c">拜访时间段</th><th class="c">拜访轨迹</th></tr></thead>
+<tbody><tr style="background:#F2F6FB">
+<td data-label="BD">喻俊生</td>
+<td class="num" data-label="客户数">15</td>
+<td class="num orange" data-label="拜访距离">6.61</td>
+<td class="c span" data-label="拜访时间段">08:31–17:23</td>
+<td class="c" data-label="拜访轨迹"><a href="javascript:void(0)" onclick="openRoute(0)" style="color:#1F4E79;font-weight:600;font-size:13px;white-space:nowrap">查看详情 ›</a></td>
+</tr><tr style="background:#FFFFFF">
+<td data-label="BD">陈鹏</td>
+<td class="num" data-label="客户数">14</td>
+<td class="num orange" data-label="拜访距离">16.42</td>
+<td class="c span" data-label="拜访时间段">08:15–19:11</td>
+<td class="c" data-label="拜访轨迹"><a href="javascript:void(0)" onclick="openRoute(1)" style="color:#1F4E79;font-weight:600;font-size:13px;white-space:nowrap">查看详情 ›</a></td>
+</tr><tr style="background:#F2F6FB">
+<td data-label="BD">徐江兰</td>
+<td class="num" data-label="客户数">13</td>
+<td class="num orange" data-label="拜访距离">15.56</td>
+<td class="c span" data-label="拜访时间段">08:21–17:46</td>
+<td class="c" data-label="拜访轨迹"><a href="javascript:void(0)" onclick="openRoute(2)" style="color:#1F4E79;font-weight:600;font-size:13px;white-space:nowrap">查看详情 ›</a></td>
+</tr><tr style="background:#FFFFFF">
+<td data-label="BD">梁静</td>
+<td class="num" data-label="客户数">12</td>
+<td class="num orange" data-label="拜访距离">8.36</td>
+<td class="c span" data-label="拜访时间段">08:32–17:45</td>
+<td class="c" data-label="拜访轨迹"><a href="javascript:void(0)" onclick="openRoute(3)" style="color:#1F4E79;font-weight:600;font-size:13px;white-space:nowrap">查看详情 ›</a></td>
+</tr><tr style="background:#F2F6FB">
+<td data-label="BD">游宗伟</td>
+<td class="num" data-label="客户数">12</td>
+<td class="num orange" data-label="拜访距离">3.36</td>
+<td class="c span" data-label="拜访时间段">08:57–18:02</td>
+<td class="c" data-label="拜访轨迹"><a href="javascript:void(0)" onclick="openRoute(4)" style="color:#1F4E79;font-weight:600;font-size:13px;white-space:nowrap">查看详情 ›</a></td>
+</tr><tr style="background:#FFFFFF">
+<td data-label="BD">李湘</td>
+<td class="num" data-label="客户数">10</td>
+<td class="num orange" data-label="拜访距离">7.17</td>
+<td class="c span" data-label="拜访时间段">08:09–17:37</td>
+<td class="c" data-label="拜访轨迹"><a href="javascript:void(0)" onclick="openRoute(5)" style="color:#1F4E79;font-weight:600;font-size:13px;white-space:nowrap">查看详情 ›</a></td>
+</tr><tr style="background:#F2F6FB">
+<td data-label="BD">段昂</td>
+<td class="num" data-label="客户数">10</td>
+<td class="num orange" data-label="拜访距离">2.01</td>
+<td class="c span" data-label="拜访时间段">07:49–14:12</td>
+<td class="c" data-label="拜访轨迹"><a href="javascript:void(0)" onclick="openRoute(6)" style="color:#1F4E79;font-weight:600;font-size:13px;white-space:nowrap">查看详情 ›</a></td>
+</tr><tr style="background:#FFFFFF">
+<td data-label="BD">董玲玲</td>
+<td class="num" data-label="客户数">2</td>
+<td class="num orange" data-label="拜访距离">0.04</td>
+<td class="c span" data-label="拜访时间段">08:57–11:58</td>
+<td class="c" data-label="拜访轨迹"><a href="javascript:void(0)" onclick="openRoute(7)" style="color:#1F4E79;font-weight:600;font-size:13px;white-space:nowrap">查看详情 ›</a></td>
+</tr><tr style="background:#F2F6FB">
+<td data-label="BD">邹叶华</td>
+<td class="num" data-label="客户数">2</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">09:24–09:33</td>
+<td class="c" data-label="拜访轨迹"><a href="javascript:void(0)" onclick="openRoute(8)" style="color:#1F4E79;font-weight:600;font-size:13px;white-space:nowrap">查看详情 ›</a></td>
+</tr><tr style="background:#FFFFFF">
+<td data-label="BD">吴汝艳</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#F2F6FB">
+<td data-label="BD">孙开</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#FFFFFF">
+<td data-label="BD">孙强</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#F2F6FB">
+<td data-label="BD">李天昊</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#FFFFFF">
+<td data-label="BD">樊强</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#F2F6FB">
+<td data-label="BD">蔡林</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr></tbody></table></div>
+</div>
+
+<div id="mask" onclick="if(event.target===this)closeRoute()">
+  <div class="box">
+    <div class="bh"><h3 id="rTitle">拜访轨迹</h3><span class="x" onclick="closeRoute()">×</span></div>
+    <div class="meta" id="rMeta"></div>
+    <div id="rMap" style="margin:0 20px 14px;border:1px solid #E2E8EF;border-radius:8px;overflow:hidden"></div>
+    <table class="st"><thead><tr><th class="n">#</th><th class="t">时间</th><th>客户 / 拜访对象</th><th>签到地址</th></tr></thead>
+    <tbody id="rStops"></tbody></table>
+  </div>
+</div>
+
+<script>
+const R={"0": {"name": "喻俊生", "group": "四组", "visits": 15, "distance": 6.61, "span": "08:31–17:23", "pace": "38min", "pts": [{"lat": 29.5308056640625, "lon": 108.76522922092013, "time": "08:31", "visit": "李家巷49号\n售后：金针菇", "loc": "城西街道城西三路56号", "seg_km": 0.0}, {"lat": 29.533010525173612, "lon": 108.76855929904514, "time": "08:40", "visit": "麦点超市\n挽回", "loc": "城西街道彩虹路黔州花苑A区", "seg_km": 0.4}, {"lat": 29.526400553385418, "lon": 108.78221978081598, "time": "08:58", "visit": "丰硕水果店\n新开", "loc": "城东街道解放路1013号天龙大酒店", "seg_km": 1.51}, {"lat": 29.526578776041667, "lon": 108.7840980360243, "time": "09:29", "visit": "县府街34号", "loc": "城东街道新华大道中段540号佳慧小区2期", "seg_km": 0.18}, {"lat": 29.526125217013888, "lon": 108.78425564236112, "time": "10:17", "visit": "灶东家餐馆\n新开", "loc": "城东街道麦当劳(黔江大十字广场)佳慧小区2期", "seg_km": 0.05}, {"lat": 29.520521375868057, "lon": 108.78714762369792, "time": "10:42", "visit": "上河居生活超市\n售后", "loc": "城南街道河滨南路东段188号上河居", "seg_km": 0.68}, {"lat": 29.518187120225694, "lon": 108.78477105034722, "time": "10:57", "visit": "挽回 峡谷超市", "loc": "城南街道南沟路65号", "seg_km": 0.35}, {"lat": 29.518197699652777, "lon": 108.78477674696181, "time": "11:10", "visit": "来棋水果店\n挽回", "loc": "城南街道南沟路65号", "seg_km": 0.0}, {"lat": 29.526651475694443, "lon": 108.78193901909722, "time": "11:23", "visit": "解放路222号蔬果\n挽回", "loc": "城东街道解放路228号天龙大酒店", "seg_km": 0.98}, {"lat": 29.528268500434027, "lon": 108.78216498480903, "time": "11:40", "visit": "南海城农贸市场228号\n挽回", "loc": "城东街道长征北路东蓝医院", "seg_km": 0.18}, {"lat": 29.526844346788195, "lon": 108.7762269422743, "time": "12:18", "visit": "菜旺仓\n挽回", "loc": "城南街道黔龙街", "seg_km": 0.6}, {"lat": 29.531818033854165, "lon": 108.76619059244791, "time": "13:14", "visit": "行署街203号蔬果超市\n新开", "loc": "城西街道行署街天城嘉苑", "seg_km": 1.12}, {"lat": 29.53076416015625, "lon": 108.76505072699653, "time": "16:00", "visit": "城西三路54号摊位\n新开", "loc": "城西街道城西三路", "seg_km": 0.16}, {"lat": 29.528880208333334, "lon": 108.76523383246528, "time": "16:46", "visit": "果之良品\n新开", "loc": "城西街道新华大道西段西郊苑", "seg_km": 0.21}, {"lat": 29.529942491319446, "lon": 108.7667271592882, "time": "17:23", "visit": "濠源超市\n新开", "loc": "城西街道武陵山路小天使幼儿园", "seg_km": 0.19}], "stops": [{"n": 1, "time": "08:31", "visit": "李家巷49号\n售后：金针菇", "loc": "城西街道城西三路56号"}, {"n": 2, "time": "08:40", "visit": "麦点超市\n挽回", "loc": "城西街道彩虹路黔州花苑A区"}, {"n": 3, "time": "08:58", "visit": "丰硕水果店\n新开", "loc": "城东街道解放路1013号天龙大酒店"}, {"n": 4, "time": "09:29", "visit": "县府街34号", "loc": "城东街道新华大道中段540号佳慧小区2期"}, {"n": 5, "time": "10:17", "visit": "灶东家餐馆\n新开", "loc": "城东街道麦当劳(黔江大十字广场)佳慧小区2期"}, {"n": 6, "time": "10:42", "visit": "上河居生活超市\n售后", "loc": "城南街道河滨南路东段188号上河居"}, {"n": 7, "time": "10:57", "visit": "挽回 峡谷超市", "loc": "城南街道南沟路65号"}, {"n": 8, "time": "11:10", "visit": "来棋水果店\n挽回", "loc": "城南街道南沟路65号"}, {"n": 9, "time": "11:23", "visit": "解放路222号蔬果\n挽回", "loc": "城东街道解放路228号天龙大酒店"}, {"n": 10, "time": "11:40", "visit": "南海城农贸市场228号\n挽回", "loc": "城东街道长征北路东蓝医院"}, {"n": 11, "time": "12:18", "visit": "菜旺仓\n挽回", "loc": "城南街道黔龙街"}, {"n": 12, "time": "13:14", "visit": "行署街203号蔬果超市\n新开", "loc": "城西街道行署街天城嘉苑"}, {"n": 13, "time": "16:00", "visit": "城西三路54号摊位\n新开", "loc": "城西街道城西三路"}, {"n": 14, "time": "16:46", "visit": "果之良品\n新开", "loc": "城西街道新华大道西段西郊苑"}, {"n": 15, "time": "17:23", "visit": "濠源超市\n新开", "loc": "城西街道武陵山路小天使幼儿园"}]}, "1": {"name": "陈鹏", "group": "四组", "visits": 14, "distance": 16.42, "span": "08:15–19:11", "pace": "50min", "pts": [{"lat": 30.828576, "lon": 106.104648, "time": "08:15", "visit": "新开客户", "loc": "舞凤街道镇江西路二段美宇·凤凰城", "seg_km": 0.0}, {"lat": 30.80945372303881, "lon": 106.09549164602612, "time": "08:34", "visit": "新开客户", "loc": "和平路街道金鱼岭路城北阳光", "seg_km": 2.3}, {"lat": 30.807823, "lon": 106.092156, "time": "09:07", "visit": "挽回客户", "loc": "和平路街道伍家坡街119号兴业·香槟小镇1期", "seg_km": 0.37}, {"lat": 30.802569, "lon": 106.082262, "time": "10:01", "visit": "新开客户", "loc": "和平路街道和平西路长城公寓(和平西路)", "seg_km": 1.11}, {"lat": 30.812443, "lon": 106.084012, "time": "10:21", "visit": "客情维护", "loc": "华凤街道凤鸣路169号佳兆业·君汇上品", "seg_km": 1.11}, {"lat": 30.835745119229443, "lon": 106.10583648246696, "time": "10:56", "visit": "新开客户", "loc": "舞凤街道万年西路55号春风·玫瑰园丽晶苑", "seg_km": 3.33}, {"lat": 30.829101, "lon": 106.091446, "time": "11:30", "visit": "新开", "loc": "华凤街道佳华路鸿通·南充院子", "seg_km": 1.56}, {"lat": 30.828549, "lon": 106.092388, "time": "11:33", "visit": "新开", "loc": "舞凤街道南充市顺庆实验幼儿园金鸿城归谷", "seg_km": 0.11}, {"lat": 30.828531, "lon": 106.092976, "time": "11:43", "visit": "新开", "loc": "舞凤街道锦程路293号金鸿城归谷", "seg_km": 0.06}, {"lat": 30.825562, "lon": 106.149821, "time": "16:45", "visit": "新开", "loc": "小龙街道林海北路阳光中心城", "seg_km": 5.44}, {"lat": 30.825562, "lon": 106.149746, "time": "16:48", "visit": "开新", "loc": "小龙街道林海北路阳光中心城", "seg_km": 0.01}, {"lat": 30.826204, "lon": 106.150292, "time": "17:26", "visit": "新开", "loc": "小龙街道林海北路阳光中心城", "seg_km": 0.09}, {"lat": 30.825787, "lon": 106.150026, "time": "18:07", "visit": "新开", "loc": "小龙街道林海北路阳光中心城", "seg_km": 0.05}, {"lat": 30.831978, "lon": 106.155773, "time": "19:11", "visit": "新开", "loc": "小龙街道阳光中心城二期37栋", "seg_km": 0.88}], "stops": [{"n": 1, "time": "08:15", "visit": "新开客户", "loc": "舞凤街道镇江西路二段美宇·凤凰城"}, {"n": 2, "time": "08:34", "visit": "新开客户", "loc": "和平路街道金鱼岭路城北阳光"}, {"n": 3, "time": "09:07", "visit": "挽回客户", "loc": "和平路街道伍家坡街119号兴业·香槟小镇1期"}, {"n": 4, "time": "10:01", "visit": "新开客户", "loc": "和平路街道和平西路长城公寓(和平西路)"}, {"n": 5, "time": "10:21", "visit": "客情维护", "loc": "华凤街道凤鸣路169号佳兆业·君汇上品"}, {"n": 6, "time": "10:56", "visit": "新开客户", "loc": "舞凤街道万年西路55号春风·玫瑰园丽晶苑"}, {"n": 7, "time": "11:30", "visit": "新开", "loc": "华凤街道佳华路鸿通·南充院子"}, {"n": 8, "time": "11:33", "visit": "新开", "loc": "舞凤街道南充市顺庆实验幼儿园金鸿城归谷"}, {"n": 9, "time": "11:43", "visit": "新开", "loc": "舞凤街道锦程路293号金鸿城归谷"}, {"n": 10, "time": "16:45", "visit": "新开", "loc": "小龙街道林海北路阳光中心城"}, {"n": 11, "time": "16:48", "visit": "开新", "loc": "小龙街道林海北路阳光中心城"}, {"n": 12, "time": "17:26", "visit": "新开", "loc": "小龙街道林海北路阳光中心城"}, {"n": 13, "time": "18:07", "visit": "新开", "loc": "小龙街道林海北路阳光中心城"}, {"n": 14, "time": "19:11", "visit": "新开", "loc": "小龙街道阳光中心城二期37栋"}]}, "2": {"name": "徐江兰", "group": "四组", "visits": 13, "distance": 15.56, "span": "08:21–17:46", "pace": "47min", "pts": [{"lat": 30.660323350694444, "lon": 107.78721598307291, "time": "08:21", "visit": "回访客户", "loc": "双桂街道西城路406号锦绣家园", "seg_km": 0.0}, {"lat": 30.66155924479167, "lon": 107.7483175998264, "time": "08:55", "visit": "新客拜访", "loc": "双桂街道知德大道皂角法制文化小区", "seg_km": 3.72}, {"lat": 30.65669623480903, "lon": 107.74257514105902, "time": "09:16", "visit": "新客拜访", "loc": "双桂街道竹韵路", "seg_km": 0.77}, {"lat": 30.64780083550347, "lon": 107.74986707899305, "time": "09:32", "visit": "新客拜访", "loc": "双桂街道湖晓路湖山云著", "seg_km": 1.21}, {"lat": 30.654700249565973, "lon": 107.74113471137153, "time": "10:02", "visit": "给客户做售后", "loc": "双桂街道龙湖路金科海成集美东方", "seg_km": 1.13}, {"lat": 30.64807047526042, "lon": 107.7536509874132, "time": "10:14", "visit": "回访", "loc": "双桂街道新跃农贸市场", "seg_km": 1.41}, {"lat": 30.648084852430557, "lon": 107.75365180121528, "time": "10:33", "visit": "促单", "loc": "双桂街道新跃农贸市场", "seg_km": 0.0}, {"lat": 30.675805935329862, "lon": 107.79771728515625, "time": "12:16", "visit": "挽回客户", "loc": "梁山街道北新街7号北门农贸批发市场", "seg_km": 5.22}, {"lat": 30.675864800347224, "lon": 107.79748779296875, "time": "12:38", "visit": "促单", "loc": "梁山街道北新街82号北门农贸批发市场", "seg_km": 0.02}, {"lat": 30.675777452256945, "lon": 107.79744384765625, "time": "13:11", "visit": "促单", "loc": "梁山街道北新街7号北门农贸批发市场", "seg_km": 0.01}, {"lat": 30.675513780381944, "lon": 107.79733452690972, "time": "13:50", "visit": "回访", "loc": "梁山街道北新街7号北门农贸批发市场", "seg_km": 0.03}, {"lat": 30.666546766493056, "lon": 107.79353000217014, "time": "16:21", "visit": "回访", "loc": "梁山街道仁和街梁平区梁山初级中学", "seg_km": 1.06}, {"lat": 30.673216688368054, "lon": 107.80024658203125, "time": "17:46", "visit": "新开", "loc": "梁山街道安宁街京百润·融城", "seg_km": 0.98}], "stops": [{"n": 1, "time": "08:21", "visit": "回访客户", "loc": "双桂街道西城路406号锦绣家园"}, {"n": 2, "time": "08:55", "visit": "新客拜访", "loc": "双桂街道知德大道皂角法制文化小区"}, {"n": 3, "time": "09:16", "visit": "新客拜访", "loc": "双桂街道竹韵路"}, {"n": 4, "time": "09:32", "visit": "新客拜访", "loc": "双桂街道湖晓路湖山云著"}, {"n": 5, "time": "10:02", "visit": "给客户做售后", "loc": "双桂街道龙湖路金科海成集美东方"}, {"n": 6, "time": "10:14", "visit": "回访", "loc": "双桂街道新跃农贸市场"}, {"n": 7, "time": "10:33", "visit": "促单", "loc": "双桂街道新跃农贸市场"}, {"n": 8, "time": "12:16", "visit": "挽回客户", "loc": "梁山街道北新街7号北门农贸批发市场"}, {"n": 9, "time": "12:38", "visit": "促单", "loc": "梁山街道北新街82号北门农贸批发市场"}, {"n": 10, "time": "13:11", "visit": "促单", "loc": "梁山街道北新街7号北门农贸批发市场"}, {"n": 11, "time": "13:50", "visit": "回访", "loc": "梁山街道北新街7号北门农贸批发市场"}, {"n": 12, "time": "16:21", "visit": "回访", "loc": "梁山街道仁和街梁平区梁山初级中学"}, {"n": 13, "time": "17:46", "visit": "新开", "loc": "梁山街道安宁街京百润·融城"}]}, "3": {"name": "梁静", "group": "四组", "visits": 12, "distance": 8.36, "span": "08:32–17:45", "pace": "50min", "pts": [{"lat": 31.18623725043403, "lon": 107.51561442057292, "time": "08:32", "visit": "开新客户", "loc": "三里坪街道迎春街南鑫广场", "seg_km": 0.0}, {"lat": 31.20749321831597, "lon": 107.51386637369792, "time": "09:02", "visit": "三里坪农贸市场227号摊位处理售后", "loc": "三里坪街道三里坪街14附4达川康桥医院(三里坪街)", "seg_km": 2.37}, {"lat": 31.20749321831597, "lon": 107.51386637369792, "time": "09:09", "visit": "三里坪农贸市场25号摊位，挽回客户，未成功", "loc": "三里坪街道三里坪街14附4达川康桥医院(三里坪街)", "seg_km": 0.0}, {"lat": 31.20749321831597, "lon": 107.51386637369792, "time": "10:15", "visit": "三里坪农贸市场新开客户", "loc": "三里坪街道三里坪街14附4达川康桥医院(三里坪街)", "seg_km": 0.0}, {"lat": 31.21665554470486, "lon": 107.50211697048611, "time": "11:23", "visit": "三委小区门口蔬菜摊   挽回客户", "loc": "西城街道朝凤北路朝阳农贸集市", "seg_km": 1.51}, {"lat": 31.216829427083333, "lon": 107.50158881293403, "time": "12:12", "visit": "朝阳农贸市场菌销售区处理售后", "loc": "西城街道朝凤北路20号朝阳农贸集市", "seg_km": 0.05}, {"lat": 31.216781412760415, "lon": 107.50185085720486, "time": "12:13", "visit": "朝阳农贸市场菌销售区处理售后", "loc": "西城街道朝凤北路18号朝阳农贸集市", "seg_km": 0.03}, {"lat": 31.216708170572918, "lon": 107.5022642686632, "time": "12:53", "visit": "实惠水果超市。找新客户", "loc": "东城街道朝凤北路48号三委小区", "seg_km": 0.04}, {"lat": 31.213216959635417, "lon": 107.49755940755209, "time": "13:48", "visit": "黄角树鲜果超市。找新客户", "loc": "西城街道桑树巷达州宾馆", "seg_km": 0.59}, {"lat": 31.211848687065974, "lon": 107.49756917317708, "time": "15:16", "visit": "刘骏精品蔬菜，找新客户", "loc": "西城街道中心巷金利亚酒店", "seg_km": 0.15}, {"lat": 31.2117041015625, "lon": 107.49745307074653, "time": "15:52", "visit": "青油直销部，找新客户", "loc": "西城街道鹅市巷2号金利亚酒店", "seg_km": 0.02}, {"lat": 31.18201388888889, "lon": 107.51249457465278, "time": "17:45", "visit": "水果地带升华店，挽回客户", "loc": "杨柳街道黄石岭街达州升华广场", "seg_km": 3.6}], "stops": [{"n": 1, "time": "08:32", "visit": "开新客户", "loc": "三里坪街道迎春街南鑫广场"}, {"n": 2, "time": "09:02", "visit": "三里坪农贸市场227号摊位处理售后", "loc": "三里坪街道三里坪街14附4达川康桥医院(三里坪街)"}, {"n": 3, "time": "09:09", "visit": "三里坪农贸市场25号摊位，挽回客户，未成功", "loc": "三里坪街道三里坪街14附4达川康桥医院(三里坪街)"}, {"n": 4, "time": "10:15", "visit": "三里坪农贸市场新开客户", "loc": "三里坪街道三里坪街14附4达川康桥医院(三里坪街)"}, {"n": 5, "time": "11:23", "visit": "三委小区门口蔬菜摊   挽回客户", "loc": "西城街道朝凤北路朝阳农贸集市"}, {"n": 6, "time": "12:12", "visit": "朝阳农贸市场菌销售区处理售后", "loc": "西城街道朝凤北路20号朝阳农贸集市"}, {"n": 7, "time": "12:13", "visit": "朝阳农贸市场菌销售区处理售后", "loc": "西城街道朝凤北路18号朝阳农贸集市"}, {"n": 8, "time": "12:53", "visit": "实惠水果超市。找新客户", "loc": "东城街道朝凤北路48号三委小区"}, {"n": 9, "time": "13:48", "visit": "黄角树鲜果超市。找新客户", "loc": "西城街道桑树巷达州宾馆"}, {"n": 10, "time": "15:16", "visit": "刘骏精品蔬菜，找新客户", "loc": "西城街道中心巷金利亚酒店"}, {"n": 11, "time": "15:52", "visit": "青油直销部，找新客户", "loc": "西城街道鹅市巷2号金利亚酒店"}, {"n": 12, "time": "17:45", "visit": "水果地带升华店，挽回客户", "loc": "杨柳街道黄石岭街达州升华广场"}]}, "4": {"name": "游宗伟", "group": "四组", "visits": 12, "distance": 3.36, "span": "08:57–18:02", "pace": "50min", "pts": [{"lat": 29.970719943576388, "lon": 106.28507703993056, "time": "08:57", "visit": "客户店名：百果园水果\n拜访事由：新开", "loc": "南津街街道南津街南景豪爵", "seg_km": 0.0}, {"lat": 29.969423556857638, "lon": 106.28530951605903, "time": "09:24", "visit": "阿兰牛肉，客情维护，处理售后", "loc": "南津街街道紫荆路410号金科世界城南区", "seg_km": 0.15}, {"lat": 29.970948893229167, "lon": 106.28809624565972, "time": "10:46", "visit": "新开，海艳豆花", "loc": "南津街街道嘉滨南路东津沱滨江公园", "seg_km": 0.32}, {"lat": 29.968057183159722, "lon": 106.28902126736111, "time": "11:05", "visit": "换回客户，赵美丽蔬菜", "loc": "南津街街道南津街希尔安·江上城", "seg_km": 0.33}, {"lat": 29.968055826822916, "lon": 106.28893283420139, "time": "11:06", "visit": "李姐干货，挽回客户", "loc": "南津街街道南津街希尔安·江上城", "seg_km": 0.01}, {"lat": 29.968275010850693, "lon": 106.28855523003472, "time": "11:29", "visit": "老表水果，新开", "loc": "南津街街道南津街希尔安·江上城B区", "seg_km": 0.04}, {"lat": 29.966971571180554, "lon": 106.28601372612847, "time": "11:36", "visit": "518鲜汇超市，新开", "loc": "南津街街道希尔安大道泰丰花园", "seg_km": 0.28}, {"lat": 29.966009928385418, "lon": 106.28485541449653, "time": "11:41", "visit": "真的好超市，新开", "loc": "南津街街道马家堡街世纪金马·生态城", "seg_km": 0.15}, {"lat": 29.96582817925347, "lon": 106.28471978081598, "time": "12:25", "visit": "邻里生鲜，挽回客户", "loc": "南津街街道马家堡街世纪金马·生态城", "seg_km": 0.02}, {"lat": 29.96637668185764, "lon": 106.28532118055556, "time": "12:47", "visit": "杜姐水果-新开", "loc": "南津街街道马家堡街泰丰花园", "seg_km": 0.08}, {"lat": 29.980455457899307, "lon": 106.27284830729167, "time": "17:45", "visit": "邹姐水果，新开", "loc": "南津街街道火柴厂街太平桥小区", "seg_km": 1.97}, {"lat": 29.980372178819444, "lon": 106.27275363498264, "time": "18:02", "visit": "张大嘴水果，新开", "loc": "南津街街道火柴厂街太平桥小区", "seg_km": 0.01}], "stops": [{"n": 1, "time": "08:57", "visit": "客户店名：百果园水果\n拜访事由：新开", "loc": "南津街街道南津街南景豪爵"}, {"n": 2, "time": "09:24", "visit": "阿兰牛肉，客情维护，处理售后", "loc": "南津街街道紫荆路410号金科世界城南区"}, {"n": 3, "time": "10:46", "visit": "新开，海艳豆花", "loc": "南津街街道嘉滨南路东津沱滨江公园"}, {"n": 4, "time": "11:05", "visit": "换回客户，赵美丽蔬菜", "loc": "南津街街道南津街希尔安·江上城"}, {"n": 5, "time": "11:06", "visit": "李姐干货，挽回客户", "loc": "南津街街道南津街希尔安·江上城"}, {"n": 6, "time": "11:29", "visit": "老表水果，新开", "loc": "南津街街道南津街希尔安·江上城B区"}, {"n": 7, "time": "11:36", "visit": "518鲜汇超市，新开", "loc": "南津街街道希尔安大道泰丰花园"}, {"n": 8, "time": "11:41", "visit": "真的好超市，新开", "loc": "南津街街道马家堡街世纪金马·生态城"}, {"n": 9, "time": "12:25", "visit": "邻里生鲜，挽回客户", "loc": "南津街街道马家堡街世纪金马·生态城"}, {"n": 10, "time": "12:47", "visit": "杜姐水果-新开", "loc": "南津街街道马家堡街泰丰花园"}, {"n": 11, "time": "17:45", "visit": "邹姐水果，新开", "loc": "南津街街道火柴厂街太平桥小区"}, {"n": 12, "time": "18:02", "visit": "张大嘴水果，新开", "loc": "南津街街道火柴厂街太平桥小区"}]}, "5": {"name": "李湘", "group": "四组", "visits": 10, "distance": 7.17, "span": "08:09–17:37", "pace": "1h03m", "pts": [{"lat": 30.73915581597222, "lon": 107.21061360677083, "time": "08:09", "visit": "店名：零食有鸣门口水果摊\n拜访事由：新开", "loc": "白塔街道北大街128号农资公司家属院", "seg_km": 0.0}, {"lat": 30.738861762152776, "lon": 107.21565890842014, "time": "08:30", "visit": "店名：家悦农贸市场菜摊\n事由：挽回", "loc": "白塔街道竹阳北路384号灯塔市场", "seg_km": 0.48}, {"lat": 30.7394189453125, "lon": 107.21478759765625, "time": "08:57", "visit": "店名：亿隆水果\n事由：：注册", "loc": "白塔街道竹阳北路灯塔市场", "seg_km": 0.1}, {"lat": 30.740537380642362, "lon": 107.21234212239584, "time": "09:07", "visit": "店名：佳佳水果\n事由：挽回", "loc": "白塔街道竹海路西段大竹阳光·丽景花园酒店", "seg_km": 0.26}, {"lat": 30.751928982204863, "lon": 107.19975260416666, "time": "09:50", "visit": "店名：张天才粮油干鲜\n事由：新开跟进", "loc": "白塔街道大竹车坝宾馆刘家坝农贸市场", "seg_km": 1.75}, {"lat": 30.744218207465277, "lon": 107.20145779079861, "time": "10:06", "visit": "店名：小胡豆蔬菜批发\n事由：挽回", "loc": "白塔街道竹海路西段青年广场", "seg_km": 0.87}, {"lat": 30.752479654947916, "lon": 107.20983561197917, "time": "12:34", "visit": "店名：世方批发超市\n内容：挽回", "loc": "白塔街道天籁村KTV(美宇·白塔水街店)川师名庭", "seg_km": 1.22}, {"lat": 30.740052354600696, "lon": 107.21541395399305, "time": "15:56", "visit": "店名：大竹红糖批发部\n新开", "loc": "白塔街道竹海路东段灯塔市场", "seg_km": 1.48}, {"lat": 30.739988335503472, "lon": 107.21589409722222, "time": "17:02", "visit": "店名：国瑞副食水果\n新开", "loc": "白塔街道竹海路东段灯塔市场", "seg_km": 0.05}, {"lat": 30.738202582465277, "lon": 107.20610785590277, "time": "17:37", "visit": "店名：攀果地\n新开", "loc": "白塔街道双燕路", "seg_km": 0.96}], "stops": [{"n": 1, "time": "08:09", "visit": "店名：零食有鸣门口水果摊\n拜访事由：新开", "loc": "白塔街道北大街128号农资公司家属院"}, {"n": 2, "time": "08:30", "visit": "店名：家悦农贸市场菜摊\n事由：挽回", "loc": "白塔街道竹阳北路384号灯塔市场"}, {"n": 3, "time": "08:57", "visit": "店名：亿隆水果\n事由：：注册", "loc": "白塔街道竹阳北路灯塔市场"}, {"n": 4, "time": "09:07", "visit": "店名：佳佳水果\n事由：挽回", "loc": "白塔街道竹海路西段大竹阳光·丽景花园酒店"}, {"n": 5, "time": "09:50", "visit": "店名：张天才粮油干鲜\n事由：新开跟进", "loc": "白塔街道大竹车坝宾馆刘家坝农贸市场"}, {"n": 6, "time": "10:06", "visit": "店名：小胡豆蔬菜批发\n事由：挽回", "loc": "白塔街道竹海路西段青年广场"}, {"n": 7, "time": "12:34", "visit": "店名：世方批发超市\n内容：挽回", "loc": "白塔街道天籁村KTV(美宇·白塔水街店)川师名庭"}, {"n": 8, "time": "15:56", "visit": "店名：大竹红糖批发部\n新开", "loc": "白塔街道竹海路东段灯塔市场"}, {"n": 9, "time": "17:02", "visit": "店名：国瑞副食水果\n新开", "loc": "白塔街道竹海路东段灯塔市场"}, {"n": 10, "time": "17:37", "visit": "店名：攀果地\n新开", "loc": "白塔街道双燕路"}]}, "6": {"name": "段昂", "group": "四组", "visits": 10, "distance": 2.01, "span": "07:49–14:12", "pace": "43min", "pts": [{"lat": 29.70534450954861, "lon": 107.39300374348959, "time": "07:49", "visit": "客户店名：何四蔬菜店\n拜访事由：之前新开客户，回访", "loc": "荔枝街道黎明路9号", "seg_km": 0.0}, {"lat": 29.707603352864584, "lon": 107.40033474392361, "time": "08:42", "visit": "六建司菜市场，\n新客户开发", "loc": "敦仁街道公园路35号建工大厦", "seg_km": 0.75}, {"lat": 29.70602566189236, "lon": 107.40159369574653, "time": "09:44", "visit": "五桂堂张\n维护老客户", "loc": "敦仁街道人民东路", "seg_km": 0.21}, {"lat": 29.70607421875, "lon": 107.40156005859374, "time": "10:07", "visit": "五桂堂b08\n维护老客户", "loc": "敦仁街道人民东路", "seg_km": 0.01}, {"lat": 29.706134168836805, "lon": 107.40153049045139, "time": "10:58", "visit": "五桂堂b02\n维护老客户", "loc": "敦仁街道人民东路", "seg_km": 0.01}, {"lat": 29.70613525390625, "lon": 107.40152913411458, "time": "11:07", "visit": "乡来客\n新客户kai fa", "loc": "敦仁街道人民东路", "seg_km": 0.0}, {"lat": 29.707549913194445, "lon": 107.40033013237847, "time": "11:24", "visit": "六建司菜市场和平\n新客户开发", "loc": "敦仁街道公园路35号建工大厦", "seg_km": 0.2}, {"lat": 29.706126030815973, "lon": 107.401533203125, "time": "11:42", "visit": "装维生鲜\n新客户开发", "loc": "敦仁街道人民东路", "seg_km": 0.2}, {"lat": 29.707017686631943, "lon": 107.39995659722223, "time": "12:00", "visit": "新生菜市场\n新客户开发", "loc": "敦仁街道人民东路时代广场(人民西路)", "seg_km": 0.18}, {"lat": 29.709217393663195, "lon": 107.39599989149306, "time": "14:12", "visit": "新鲜蔬菜\n老客户维护", "loc": "敦仁街道中山路金科长江星辰", "seg_km": 0.45}], "stops": [{"n": 1, "time": "07:49", "visit": "客户店名：何四蔬菜店\n拜访事由：之前新开客户，回访", "loc": "荔枝街道黎明路9号"}, {"n": 2, "time": "08:42", "visit": "六建司菜市场，\n新客户开发", "loc": "敦仁街道公园路35号建工大厦"}, {"n": 3, "time": "09:44", "visit": "五桂堂张\n维护老客户", "loc": "敦仁街道人民东路"}, {"n": 4, "time": "10:07", "visit": "五桂堂b08\n维护老客户", "loc": "敦仁街道人民东路"}, {"n": 5, "time": "10:58", "visit": "五桂堂b02\n维护老客户", "loc": "敦仁街道人民东路"}, {"n": 6, "time": "11:07", "visit": "乡来客\n新客户kai fa", "loc": "敦仁街道人民东路"}, {"n": 7, "time": "11:24", "visit": "六建司菜市场和平\n新客户开发", "loc": "敦仁街道公园路35号建工大厦"}, {"n": 8, "time": "11:42", "visit": "装维生鲜\n新客户开发", "loc": "敦仁街道人民东路"}, {"n": 9, "time": "12:00", "visit": "新生菜市场\n新客户开发", "loc": "敦仁街道人民东路时代广场(人民西路)"}, {"n": 10, "time": "14:12", "visit": "新鲜蔬菜\n老客户维护", "loc": "敦仁街道中山路金科长江星辰"}]}, "7": {"name": "董玲玲", "group": "四组", "visits": 2, "distance": 0.04, "span": "08:57–11:58", "pace": "3h01m", "pts": [{"lat": 30.83816975911458, "lon": 106.97493950737847, "time": "08:57", "visit": "开新客", "loc": "渠江街道滨河西路", "seg_km": 0.0}, {"lat": 30.838470865885416, "lon": 106.9751611328125, "time": "11:58", "visit": "处理售后", "loc": "渠江街道滨河路", "seg_km": 0.04}], "stops": [{"n": 1, "time": "08:57", "visit": "开新客", "loc": "渠江街道滨河西路"}, {"n": 2, "time": "11:58", "visit": "处理售后", "loc": "渠江街道滨河路"}]}, "8": {"name": "邹叶华", "group": "四组", "visits": 2, "distance": 0.0, "span": "09:24–09:33", "pace": "9min", "pts": [{"lat": 29.426507, "lon": 105.74022, "time": "09:24", "visit": "客户店名：邮亭干杂店\n拜访事由：新开", "loc": "邮亭镇邮亭镇综合市场", "seg_km": 0.0}, {"lat": 29.426535, "lon": 105.740196, "time": "09:33", "visit": "生鲜摊\n处理售后", "loc": "邮亭镇邮亭镇综合市场", "seg_km": 0.0}], "stops": [{"n": 1, "time": "09:24", "visit": "客户店名：邮亭干杂店\n拜访事由：新开", "loc": "邮亭镇邮亭镇综合市场"}, {"n": 2, "time": "09:33", "visit": "生鲜摊\n处理售后", "loc": "邮亭镇邮亭镇综合市场"}]}};
+var rMap=null, rLayer=null, rReady=false;
+function ensureMap(){
+  if(rReady) return;
+  rMap=L.map('rMap').setView([29.43,106.27],12);
+  L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',{subdomains:'1234',maxZoom:18,attribution:'© 高德地图'}).addTo(rMap);
+  rLayer=L.layerGroup().addTo(rMap);
+  rReady=true;
+}
+function openRoute(i){
+  var d=R[i]; if(!d) return;
+  document.getElementById('rTitle').textContent=d.name+' · 拜访轨迹';
+  document.getElementById('rMeta').innerHTML='分组 <b>'+d.group+'</b>　|　客户数 <b>'+d.visits+'</b> 家　|　拜访距离 <b>'+d.distance+'</b> km　|　时间段 '+d.span;
+  ensureMap();
+  rLayer.clearLayers();
+  var latlngs=[];
+  d.pts.forEach(function(p,idx){
+    var ll=[parseFloat(p.lat),parseFloat(p.lon)];
+    if(isNaN(ll[0])||isNaN(ll[1])) return;
+    latlngs.push(ll);
+    var icon=L.divIcon({className:'rkmk',html:"<div style='background:#D85A30;color:#fff;border-radius:50%;width:22px;height:22px;line-height:22px;text-align:center;font-size:12px;box-shadow:0 1px 3px rgba(0,0,0,.4)'>"+(idx+1)+"</div>",iconSize:[22,22],iconAnchor:[11,11]});
+    L.marker(ll,{icon:icon}).addTo(rLayer).bindPopup('<b>#'+(idx+1)+' '+(p.visit||'签到')+'</b><br>'+(p.time||'')+'<br>'+(p.loc||''));
+    if(idx>0){
+      var prev=d.pts[idx-1];
+      var a=[parseFloat(prev.lat),parseFloat(prev.lon)];
+      if(!isNaN(a[0])&&!isNaN(a[1])){
+        var seg=(p.seg_km!=null)?p.seg_km:0;
+        L.polyline([a,ll],{color:'#D85A30',weight:3,opacity:.85}).addTo(rLayer);
+        var mid=[(a[0]+ll[0])/2,(a[1]+ll[1])/2];
+        L.tooltip({permanent:true,direction:'center',className:'segdist',opacity:0.95})
+          .setLatLng(mid)
+          .setContent(seg+' km')
+          .addTo(rLayer);
+      }
+    }
+  });
+  document.getElementById('mask').classList.add('show');
+  setTimeout(function(){
+    rMap.invalidateSize();
+    if(latlngs.length){ rMap.fitBounds(latlngs,{padding:[40,40],maxZoom:15}); }
+  },60);
+  var h='';
+  d.stops.forEach(function(s){
+    h+='<tr><td class="n">'+s.n+'</td><td class="t">'+s.time+'</td><td>'+s.visit+'</td><td>'+s.loc+'</td></tr>';
+  });
+  document.getElementById('rStops').innerHTML=h;
+}
+function closeRoute(){ document.getElementById('mask').classList.remove('show'); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeRoute(); });
+
+</script>
+</body></html>

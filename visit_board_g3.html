@@ -1,0 +1,258 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>三组 · BD 拜访看板 · 主管：唐月（2026-09-18）</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*{box-sizing:border-box}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;margin:0;background:#EEF2F7;color:#222}
+.head{background:#1F4E79;color:#fff;padding:24px 28px}
+.head h1{margin:0;font-size:26px}
+.head .sub{margin-top:6px;color:#D2E0EB;font-size:14px}
+.wrap{max-width:1080px;margin:0 auto;padding:20px}
+.cards{display:flex;gap:14px;margin-bottom:18px}
+.card{flex:1;background:#fff;border:1px solid #D7E0EA;border-radius:10px;padding:16px}
+.card .v{font-size:34px;font-weight:700;color:#D85A30}
+.card .u{font-size:16px;color:#D85A30;margin-left:4px}
+.card .l{color:#777;font-size:13px;margin-top:6px}
+.section{background:#fff;border:1px solid #D7E0EA;border-radius:10px;padding:16px;margin-bottom:18px;overflow-x:auto}
+.section h2{font-size:17px;margin:0 0 10px;color:#1F4E79}
+.dist{color:#666;font-size:14px}
+.chart{margin:6px 0 2px}
+.crow{display:flex;align-items:flex-end;gap:10px;height:120px}
+.col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.bv{font-size:20px;font-weight:700;color:#D85A30;margin-bottom:4px;font-variant-numeric:tabular-nums}
+.bar{width:62%;max-width:38px;min-height:4px;background:linear-gradient(180deg,#E8805A,#D85A30);border-radius:5px 5px 0 0}
+.xl{font-size:14px;color:#667;margin-top:5px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{background:#1F4E79;color:#fff;text-align:left;padding:9px 12px;font-size:14px;vertical-align:middle}
+td{padding:9px 12px;border-bottom:1px solid #E8EEF4;vertical-align:middle}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums;font-size:16px;font-weight:700}
+th.c,td.c{text-align:center}
+td.orange{color:#D85A30;font-weight:700;font-size:16px}
+td.span{font-size:16px;font-weight:600;color:#1F4E79;white-space:nowrap}
+.foot{color:#888;font-size:12px;text-align:center;padding:16px}
+#mask{display:none;position:fixed;inset:0;background:rgba(20,40,60,.55);z-index:50;
+  align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
+#mask.show{display:flex}
+.box{background:#fff;border-radius:12px;max-width:820px;width:100%;max-height:calc(100vh - 32px);overflow:auto;
+  box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.box .bh{background:#1F4E79;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.box .bh h3{margin:0;font-size:18px}
+.box .bh .x{cursor:pointer;font-size:22px;line-height:1;opacity:.85}
+.box .meta{padding:12px 20px 0;color:#555;font-size:13px}
+.box .meta b{color:#D85A30}
+.box img.route{display:block;width:100%;height:auto;padding:14px 20px;box-sizing:border-box}
+#rMap{height:300px}
+.box table.st{width:100%;border-collapse:collapse;font-size:13px;margin:0 0 16px}
+.box table.st th{background:#F2F6FB;color:#1F4E79;position:static}
+.box table.st td{border-bottom:1px solid #EDF1F5}
+.box table.st .n{width:40px;text-align:center;color:#1F4E79;font-weight:700}
+.box table.st .t{width:70px;text-align:center;font-variant-numeric:tabular-nums}
+.leaflet-tooltip.segdist{background:rgba(255,255,255,.9);border:none;box-shadow:0 1px 3px rgba(0,0,0,.25);font-size:11px;color:#1F4E79;font-weight:700;padding:1px 5px;border-radius:4px}
+.leaflet-tooltip.segdist::before{display:none}
+@media (max-width:640px){
+  .head{padding:16px}
+  .head h1{font-size:21px}
+  .head .sub{font-size:12px;line-height:1.5}
+  .wrap{padding:12px}
+  .cards{flex-wrap:wrap;gap:10px}
+  .card{flex:1 1 46%;min-width:0;padding:12px}
+  .card .v{font-size:26px}
+  .card .u{font-size:14px}
+  .card .l{font-size:12px}
+  .section{padding:12px}
+  .section h2{font-size:16px}
+  /* 手机端：BD 明细表恢复按行分布（每行一个 BD），列宽填满屏宽、不左右滑屏 */
+  table.bd{display:table;width:100%;table-layout:fixed;font-size:12px}
+  table.bd thead{display:table-header-group}
+  table.bd tbody{display:table-row-group}
+  table.bd tr{display:table-row}
+  table.bd th,table.bd td{display:table-cell;padding:7px 5px;font-size:12px;
+    border-bottom:1px solid #EDF1F5;white-space:normal;word-break:break-word;overflow-wrap:anywhere;vertical-align:middle}
+  table.bd th{font-size:12px}
+  table.bd td::before{content:none}
+  table.bd td.num{text-align:right;font-size:14px}
+  table.bd td.orange{text-align:right;font-size:14px;color:#D85A30}
+  table.bd td.c{text-align:center}
+  table.bd td.span{text-align:center;font-size:13px;color:#1F4E79;font-weight:600}
+  /* 按行表格列宽：BD/客户数收窄、时间段/轨迹给足空间，避免被挤缩 */
+  table.bd th:nth-child(1),table.bd td:nth-child(1){width:20%}
+  table.bd th:nth-child(2),table.bd td:nth-child(2){width:14%}
+  table.bd th:nth-child(3),table.bd td:nth-child(3){width:18%}
+  table.bd th:nth-child(4),table.bd td:nth-child(4){width:28%}
+  table.bd th:nth-child(5),table.bd td:nth-child(5){width:20%}
+  /* 表头与居中列禁止换行：客户数/查看详情不再挤成两行 */
+  table.bd th{white-space:nowrap;padding:7px 4px}
+  table.bd td{padding:7px 4px}
+  table.bd td.c{white-space:nowrap}
+  #rMap{height:220px;margin:0 16px 10px !important}
+  .box{max-width:100%}
+  .box img.route{padding:12px}
+  .box .bh h3{font-size:16px}
+  .box .meta{padding:10px 16px 0;font-size:12px;line-height:1.5;white-space:normal;word-break:break-word;overflow-wrap:anywhere}
+  /* 逐站表：长地址换行，禁止横向溢出 */
+  .box table.st{display:table;width:100%}
+  .box table.st th,.box table.st td{white-space:normal;word-break:break-word;overflow-wrap:anywhere;vertical-align:top;padding:7px 8px;font-size:12px}
+  .box table.st .n{width:30px}
+  .box table.st .t{width:58px}
+  /* 手机端：时段分布图压低，避免占太多纵向空间 */
+  .crow{height:104px;gap:6px}
+  .bv{font-size:24px;margin-bottom:4px}
+  .xl{font-size:16px;margin-top:5px}
+  .bar{width:72%;max-width:32px}
+}
+</style></head><body>
+<div class="head"><h1>三组 · BD 拜访看板 · 主管：唐月</h1>
+<div class="sub">统计日期 2026-09-18　|　13 人　|　数据来源：钉钉签到</div></div>
+<div class="wrap">
+<div class="cards">
+<div class="card"><div><span class="v">0</span><span class="u">家</span></div><div class="l">拜访客户数</div></div><div class="card"><div><span class="v">0.0</span><span class="u">km</span></div><div class="l">拜访里程</div></div><div class="card"><div><span class="v">0.0</span><span class="u">家</span></div><div class="l">人均拜访</div></div><div class="card"><div><span class="v">—</span><span class="u"></span></div><div class="l">平均拜访间隔</div></div>
+</div>
+<div class="section"><h2>拜访时段分布</h2><div class="dist">—</div></div>
+<div class="section"><h2>BD 拜访明细（13 人 / 签到 0 人）</h2>
+<table class="bd"><thead><tr><th>BD</th><th class="num">客户数</th><th class="num">拜访距离</th><th class="c">拜访时间段</th><th class="c">拜访轨迹</th></tr></thead>
+<tbody><tr style="background:#F2F6FB">
+<td data-label="BD">刘艳</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#FFFFFF">
+<td data-label="BD">卢上红</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#F2F6FB">
+<td data-label="BD">张渝川</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#FFFFFF">
+<td data-label="BD">张珈豪</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#F2F6FB">
+<td data-label="BD">徐杰</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#FFFFFF">
+<td data-label="BD">李彬</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#F2F6FB">
+<td data-label="BD">杨松</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#FFFFFF">
+<td data-label="BD">林夏</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#F2F6FB">
+<td data-label="BD">董嘉豪</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#FFFFFF">
+<td data-label="BD">谭东伟</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#F2F6FB">
+<td data-label="BD">赵帅</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#FFFFFF">
+<td data-label="BD">陈登辉</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr><tr style="background:#F2F6FB">
+<td data-label="BD">魏大尉</td>
+<td class="num" data-label="客户数">0</td>
+<td class="num orange" data-label="拜访距离">0.0</td>
+<td class="c span" data-label="拜访时间段">—</td>
+<td class="c" data-label="拜访轨迹"><span style="color:#B8C0C8">—</span></td>
+</tr></tbody></table></div>
+</div>
+
+<div id="mask" onclick="if(event.target===this)closeRoute()">
+  <div class="box">
+    <div class="bh"><h3 id="rTitle">拜访轨迹</h3><span class="x" onclick="closeRoute()">×</span></div>
+    <div class="meta" id="rMeta"></div>
+    <div id="rMap" style="margin:0 20px 14px;border:1px solid #E2E8EF;border-radius:8px;overflow:hidden"></div>
+    <table class="st"><thead><tr><th class="n">#</th><th class="t">时间</th><th>客户 / 拜访对象</th><th>签到地址</th></tr></thead>
+    <tbody id="rStops"></tbody></table>
+  </div>
+</div>
+
+<script>
+const R={};
+var rMap=null, rLayer=null, rReady=false;
+function ensureMap(){
+  if(rReady) return;
+  rMap=L.map('rMap').setView([29.43,106.27],12);
+  L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',{subdomains:'1234',maxZoom:18,attribution:'© 高德地图'}).addTo(rMap);
+  rLayer=L.layerGroup().addTo(rMap);
+  rReady=true;
+}
+function openRoute(i){
+  var d=R[i]; if(!d) return;
+  document.getElementById('rTitle').textContent=d.name+' · 拜访轨迹';
+  document.getElementById('rMeta').innerHTML='分组 <b>'+d.group+'</b>　|　客户数 <b>'+d.visits+'</b> 家　|　拜访距离 <b>'+d.distance+'</b> km　|　时间段 '+d.span;
+  ensureMap();
+  rLayer.clearLayers();
+  var latlngs=[];
+  d.pts.forEach(function(p,idx){
+    var ll=[parseFloat(p.lat),parseFloat(p.lon)];
+    if(isNaN(ll[0])||isNaN(ll[1])) return;
+    latlngs.push(ll);
+    var icon=L.divIcon({className:'rkmk',html:"<div style='background:#D85A30;color:#fff;border-radius:50%;width:22px;height:22px;line-height:22px;text-align:center;font-size:12px;box-shadow:0 1px 3px rgba(0,0,0,.4)'>"+(idx+1)+"</div>",iconSize:[22,22],iconAnchor:[11,11]});
+    L.marker(ll,{icon:icon}).addTo(rLayer).bindPopup('<b>#'+(idx+1)+' '+(p.visit||'签到')+'</b><br>'+(p.time||'')+'<br>'+(p.loc||''));
+    if(idx>0){
+      var prev=d.pts[idx-1];
+      var a=[parseFloat(prev.lat),parseFloat(prev.lon)];
+      if(!isNaN(a[0])&&!isNaN(a[1])){
+        var seg=(p.seg_km!=null)?p.seg_km:0;
+        L.polyline([a,ll],{color:'#D85A30',weight:3,opacity:.85}).addTo(rLayer);
+        var mid=[(a[0]+ll[0])/2,(a[1]+ll[1])/2];
+        L.tooltip({permanent:true,direction:'center',className:'segdist',opacity:0.95})
+          .setLatLng(mid)
+          .setContent(seg+' km')
+          .addTo(rLayer);
+      }
+    }
+  });
+  document.getElementById('mask').classList.add('show');
+  setTimeout(function(){
+    rMap.invalidateSize();
+    if(latlngs.length){ rMap.fitBounds(latlngs,{padding:[40,40],maxZoom:15}); }
+  },60);
+  var h='';
+  d.stops.forEach(function(s){
+    h+='<tr><td class="n">'+s.n+'</td><td class="t">'+s.time+'</td><td>'+s.visit+'</td><td>'+s.loc+'</td></tr>';
+  });
+  document.getElementById('rStops').innerHTML=h;
+}
+function closeRoute(){ document.getElementById('mask').classList.remove('show'); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeRoute(); });
+
+</script>
+</body></html>
