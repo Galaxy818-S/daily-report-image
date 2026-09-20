@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0.1",
+  "notes": "1.0.0.1：修复安装包图标路径；自动更新改走 Pages release/ 目录（发布端与更新端路径统一）。",
+  "url": "https://galaxy818-s.github.io/daily-report-image/release/cxjp_daily_setup.exe",
+  "size": 74184754,
+  "sha256": "7da404100ff7a56ca2f4301dc966ec3c012103f6289301abce805f83f628bb8d"
+}
